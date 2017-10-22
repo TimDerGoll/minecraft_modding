@@ -1,0 +1,15 @@
+#Creative Tab
+itemGroup.facading=Facading
+
+#Blocks
+tile.facading.facade.name=Facade
+tile.facading.facadingbench.name=Facadingbench
+
+#Items
+item.facading.hammer.name=Facading Hammer
+
+
+
+#tile.facading.test_state_block.0.name=Test State Block 0
+
+

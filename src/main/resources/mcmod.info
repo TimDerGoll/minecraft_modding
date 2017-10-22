@@ -1,0 +1,14 @@
+[{
+	"modid": "how2mod",
+	"name": "How 2 Mod",
+	"description": "A mod telling people how to mod",
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "",
+	"updateUrl": "",
+	"authorList": ["Shadows_of_Fire"],
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": []
+}]
