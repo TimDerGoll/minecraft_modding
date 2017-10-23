@@ -20,7 +20,7 @@ public class Facading {
 
 	public static final String MODID = "facading";
 	public static final String NAME = "Facading";
-	public static final String VERSION = "alpha_0.1";
+	public static final String VERSION = "alpha_0.2";
 
 	@Instance
 	public static Facading INSTANCE;

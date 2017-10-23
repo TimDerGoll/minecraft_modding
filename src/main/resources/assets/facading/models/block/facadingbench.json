@@ -2,7 +2,7 @@
   "parent": "block/cube",
   "textures": {
     "particle": "facading:blocks/facadingbench_front",
-    "down": "facading:blocks/facadingbench_bottom",
+    "down": "facading:blocks/defaultblock",
     "up": "facading:blocks/facadingbench_top",
     "south": "facading:blocks/facadingbench_back",
     "west": "facading:blocks/facadingbench_right",

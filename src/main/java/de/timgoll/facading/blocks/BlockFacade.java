@@ -5,12 +5,14 @@ import de.timgoll.facading.client.IHasModel;
 import de.timgoll.facading.init.ModRegistry;
 import de.timgoll.facading.titleentities.TileBlockFacade;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGlass;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,23 +30,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-
 public class BlockFacade extends Block implements IHasModel, ITileEntityProvider {
-    public BlockFacade(String name, boolean hasCustomItemBlock) {
+    public BlockFacade(String name) {
         super(Material.WOOD);
         this.setHardness(0.1F);
         this.setSoundType(SoundType.WOOD);
         this.setRegistryName(name);
         this.setUnlocalizedName(Facading.MODID + "." + name);
         this.setCreativeTab(ModRegistry.TAB);
-
-        ModRegistry.BLOCKS.add(this);
-
-        if(!hasCustomItemBlock) ModRegistry.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
     }
 
-    public BlockFacade(String name) {
-        this(name, false);
+    public Item registerBlockItem() {
+        Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
+
+        ModRegistry.BLOCKS.add(this);
+        ModRegistry.ITEMS.add(newItemBlock);
+
+        return newItemBlock;
     }
 
     //register default generated item for Block
@@ -114,9 +117,23 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
         world.removeTileEntity(pos);
     }
 
+    /**
+     * Make a glass effect, sides to adjacent blocks don't get rendered
+     */
+    @SuppressWarnings("deprecation")
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
+        Block block = iblockstate.getBlock();
 
-    //@SideOnly(Side.CLIENT)
-    //public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-    //    return blockAccess.getBlockState(pos.offset(side)).doesSideBlockRendering(blockAccess, pos.offset(side), side.getOpposite());
-    //}
+        if (this == ModRegistry.BLOCK_FACADE) {
+            if (blockState != iblockstate)
+                return true;
+
+            if (block == this)
+                return false;
+        }
+
+        return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+    }
 }

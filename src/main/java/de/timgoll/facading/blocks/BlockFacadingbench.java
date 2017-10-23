@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 public class BlockFacadingbench extends Block implements IHasModel, ITileEntityProvider {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-    public BlockFacadingbench(String name, boolean hasCustomItemBlock) {
+    public BlockFacadingbench(String name) {
         super(Material.ROCK);
         this.setHardness(3.5F);
 
@@ -42,15 +42,16 @@ public class BlockFacadingbench extends Block implements IHasModel, ITileEntityP
         this.setRegistryName(name);
         this.setCreativeTab(ModRegistry.TAB);
 
-        ModRegistry.BLOCKS.add(this);
-
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-
-        if (!hasCustomItemBlock) ModRegistry.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
     }
 
-    public BlockFacadingbench(String name) {
-        this(name, false);
+    public Item registerBlockItem() {
+        Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
+
+        ModRegistry.BLOCKS.add(this);
+        ModRegistry.ITEMS.add(newItemBlock);
+
+        return newItemBlock;
     }
 
     /**

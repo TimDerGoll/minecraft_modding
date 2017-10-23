@@ -16,24 +16,28 @@ public class TileBlockFacadingbench extends TileEntity {
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
+        //System.out.println("reading from nbt .......................................................................");
         super.readFromNBT(compound);
         inventory.deserializeNBT(compound.getCompoundTag("inventory"));
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        //System.out.println("writing to NBT .......................................................................");
         compound.setTag("inventory", inventory.serializeNBT());
         return super.writeToNBT(compound);
     }
 
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        //System.out.println("Requesting Capability .......................................................................");
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Nullable
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        //System.out.println("Capability: " + CapabilityItemHandler.ITEM_HANDLER_CAPABILITY + ".........................................................");
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) inventory : super.getCapability(capability, facing);
     }
 
