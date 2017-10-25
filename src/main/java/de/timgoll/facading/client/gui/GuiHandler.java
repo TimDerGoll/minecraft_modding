@@ -14,6 +14,8 @@ public class GuiHandler implements IGuiHandler {
 
     public static final int GUI_FACADING_CONTAINER_ID = 0;
 
+    private static Object OPENGUI;
+
     @Nullable
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -33,9 +35,13 @@ public class GuiHandler implements IGuiHandler {
 
         switch (ID) {
             case GUI_FACADING_CONTAINER_ID:
-                return new GuiFacadingbenchContainer(player.inventory, (TileBlockFacadingbench) te);
+                this.OPENGUI = new GuiFacadingbenchContainer(player.inventory, (TileBlockFacadingbench) te);
+                return this.OPENGUI;
             default: return null;
         }
     }
 
+    public static Object getOpenGui() {
+        return OPENGUI;
+    }
 }

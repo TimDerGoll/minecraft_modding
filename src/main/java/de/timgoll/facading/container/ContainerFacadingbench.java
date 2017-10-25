@@ -2,8 +2,11 @@ package de.timgoll.facading.container;
 
 import de.timgoll.facading.container.slots.SlotFacadingbench;
 import de.timgoll.facading.init.ModRegistry;
+import de.timgoll.facading.network.PacketGuiOpened;
+import de.timgoll.facading.network.PacketHandler;
 import de.timgoll.facading.titleentities.TileBlockFacadingbench;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -11,6 +14,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -73,6 +78,24 @@ public class ContainerFacadingbench extends Container {
             for (int i = 0; i < 9; i++) {
                 addSlotToContainer(new Slot(inventoryPlayer, i, SHIFTLEFT + (i * SLOTSIZE), HOTBARSHIFT));
             }
+
+            //Handle data transfer
+            EntityPlayer player = inventoryPlayer.player;
+            World world = player.world;
+
+            if (!world.isRemote) {
+                PacketHandler.INSTANCE.sendTo(
+                    new PacketGuiOpened(
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            tileBlockFacadingbench.getWaterPowerActivated()
+                    ),
+                    (EntityPlayerMP) player
+                );
+            }
         }
     }
 
@@ -100,8 +123,8 @@ public class ContainerFacadingbench extends Container {
 
         allowedItems.add(ModRegistry.ITEM_FLINTWOODCUTTER);
         allowedItems.add(ModRegistry.ITEM_IRONTOOTHSAW);
-        allowedItems.add(ModRegistry.ITEM_IRONJAPANSAW);
         allowedItems.add(ModRegistry.ITEM_DIAMONDCIRCULARSAW);
+        allowedItems.add(ModRegistry.ITEM_NETHERSAW);
 
         return allowedItems;
     }

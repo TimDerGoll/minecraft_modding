@@ -14,9 +14,9 @@ import net.minecraftforge.client.model.ModelLoader;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemIronJapanSaw extends Item implements IHasModel {
+public class ItemNetherSaw extends Item implements IHasModel {
 
-    public ItemIronJapanSaw(String name) {
+    public ItemNetherSaw(String name) {
         this.setRegistryName(name);
         this.setUnlocalizedName(Facading.MODID + "." + name);
         this.setCreativeTab(ModRegistry.TAB);
@@ -33,7 +33,7 @@ public class ItemIronJapanSaw extends Item implements IHasModel {
     @Override
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, playerIn, tooltip, advanced);
-        String tooltip_text = new TextComponentTranslation("tooltip.ironjapansaw.text").getFormattedText();
+        String tooltip_text = new TextComponentTranslation("tooltip.nethersaw.text").getFormattedText();
         tooltip.add(tooltip_text);
     }
 

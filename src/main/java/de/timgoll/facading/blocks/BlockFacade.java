@@ -38,12 +38,17 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
         this.setRegistryName(name);
         this.setUnlocalizedName(Facading.MODID + "." + name);
         this.setCreativeTab(ModRegistry.TAB);
+
+        registerBlock();
+    }
+
+    private void registerBlock() {
+        ModRegistry.BLOCKS.add(this);
     }
 
     public Item registerBlockItem() {
         Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
 
-        ModRegistry.BLOCKS.add(this);
         ModRegistry.ITEMS.add(newItemBlock);
 
         return newItemBlock;

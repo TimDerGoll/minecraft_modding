@@ -14,9 +14,14 @@ out
 .idea
 
 # gradle
-#build
+build/classes
+build/resources
+build/sources
+build/taskLogs
+build/tmp
 .gradle
 
 # other
 eclipse
 run
+classes

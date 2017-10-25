@@ -15,21 +15,24 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockFacadingbench extends Block implements IHasModel, ITileEntityProvider {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -43,12 +46,17 @@ public class BlockFacadingbench extends Block implements IHasModel, ITileEntityP
         this.setCreativeTab(ModRegistry.TAB);
 
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+
+        registerBlock();
+    }
+
+    private void registerBlock() {
+        ModRegistry.BLOCKS.add(this);
     }
 
     public Item registerBlockItem() {
         Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
 
-        ModRegistry.BLOCKS.add(this);
         ModRegistry.ITEMS.add(newItemBlock);
 
         return newItemBlock;
@@ -60,6 +68,13 @@ public class BlockFacadingbench extends Block implements IHasModel, ITileEntityP
     @Override
     public void registerModels() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+    }
+
+    /**
+     * Get the Item that this Block should drop when harvested.
+     */
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return Item.getItemFromBlock(ModRegistry.BLOCK_FACADINGBENCH);
     }
 
     @Override
@@ -86,6 +101,7 @@ public class BlockFacadingbench extends Block implements IHasModel, ITileEntityP
                 }
             }
         }
+        world.removeTileEntity(pos);
         super.breakBlock(world, pos, state);
     }
 
@@ -98,11 +114,12 @@ public class BlockFacadingbench extends Block implements IHasModel, ITileEntityP
 
     private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
-            IBlockState iblockstate = worldIn.getBlockState(pos.north());
+            IBlockState iblockstate  = worldIn.getBlockState(pos.north());
             IBlockState iblockstate1 = worldIn.getBlockState(pos.south());
             IBlockState iblockstate2 = worldIn.getBlockState(pos.west());
             IBlockState iblockstate3 = worldIn.getBlockState(pos.east());
-            EnumFacing enumfacing = (EnumFacing) state.getValue(FACING);
+
+            EnumFacing enumfacing    = state.getValue(FACING);
 
             if (enumfacing == EnumFacing.NORTH && iblockstate.isFullBlock() && !iblockstate1.isFullBlock()) {
                 enumfacing = EnumFacing.SOUTH;
@@ -115,6 +132,18 @@ public class BlockFacadingbench extends Block implements IHasModel, ITileEntityP
             }
 
             worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+        }
+    }
+
+    public static void setState(boolean active, World world, BlockPos pos) {
+        IBlockState iblockstate = world.getBlockState(pos);
+
+        if (active) {
+            world.setBlockState(pos, ModRegistry.BLOCK_FACADINGBENCH_POWERED.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            world.setBlockState(pos, ModRegistry.BLOCK_FACADINGBENCH_POWERED.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        } else {
+            world.setBlockState(pos, ModRegistry.BLOCK_FACADINGBENCH.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            world.setBlockState(pos, ModRegistry.BLOCK_FACADINGBENCH.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
     }
 
@@ -133,8 +162,10 @@ public class BlockFacadingbench extends Block implements IHasModel, ITileEntityP
     /**
      * Called by ItemBlocks after a block is set in the world, to allow post-place logic
      */
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+
+        detectWaterBlock(placer.getHorizontalFacing().getOpposite().getDirectionVec(), world, pos);
     }
 
     @SuppressWarnings("deprecation")
@@ -195,5 +226,34 @@ public class BlockFacadingbench extends Block implements IHasModel, ITileEntityP
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileBlockFacadingbench();
+    }
+
+    /**
+     * detect adjacent blockchanges to detect waterpower
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+        detectWaterBlock(state.getValue(FACING).getDirectionVec(), world, pos);
+
+        super.neighborChanged(state, world, pos, block, fromPos);
+    }
+
+    private void detectWaterBlock(Vec3i facingvector, World world, BlockPos pos) {
+
+        if (world.isRemote) //just check on server, abort
+            return;
+
+        Block adjacentBlock = world.getBlockState(pos.subtract( facingvector ) ).getBlock(); //substract facing vector, because facing is to the front
+
+        //TODO: Detect if not sourceblock
+        //TODO: get water flow vector
+
+        //Detect activation and store value in TileEntity
+        TileBlockFacadingbench te = (TileBlockFacadingbench) world.getTileEntity(pos);
+        if (te != null) {
+            boolean waterSource = adjacentBlock.equals(Blocks.WATER) || adjacentBlock.equals(Blocks.FLOWING_WATER);
+            te.setWaterPowerActivated(waterSource); //true or false
+        }
     }
 }

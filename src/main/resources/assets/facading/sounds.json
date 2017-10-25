@@ -1,0 +1,8 @@
+{
+  "facadingbench_powered": {
+    "category": "block",
+    "sounds": [
+      "facading:facadingbench_powered"
+    ]
+  }
+}

@@ -16,8 +16,8 @@ public class RecipeHandler {
 
         addFlintWoodCutter();
         addIronToothSaw();
-        addIronJapanSaw();
         addDiamondCicularSaw();
+        addNetherSaw();
 
         addMachineframe();
         addFacadingbench();
@@ -37,6 +37,7 @@ public class RecipeHandler {
             'S', "stickWood",
             'W', "plankWood"
         );
+
         GameRegistry.addShapedRecipe(
             new ResourceLocation("hammer_copper"),
             new ResourceLocation("facading"),
@@ -126,30 +127,6 @@ public class RecipeHandler {
         );
     }
 
-    private void addIronJapanSaw() {
-        GameRegistry.addShapedRecipe(
-            new ResourceLocation("ironjapansaw_iron"),
-            new ResourceLocation("facading"),
-            new ItemStack(ModRegistry.ITEM_IRONJAPANSAW),
-            "SSS",
-            "II ",
-            "   ",
-            'I', "blockIron",
-            'S', "stickWood"
-        );
-
-        GameRegistry.addShapedRecipe(
-            new ResourceLocation("ironjapansaw_copper"),
-            new ResourceLocation("facading"),
-            new ItemStack(ModRegistry.ITEM_IRONJAPANSAW),
-            "SSS",
-            "II ",
-            "   ",
-            'I', "blockCopper",
-            'S', "stickWood"
-        );
-    }
-
     private void addDiamondCicularSaw() {
         GameRegistry.addShapedRecipe(
             new ResourceLocation("diamondcicularsaw_iron"),
@@ -171,6 +148,19 @@ public class RecipeHandler {
             " D ",
             'I', "ingotCopper",
             'D', "gemDiamond"
+        );
+    }
+
+    private void addNetherSaw() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("nethersaw"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.ITEM_NETHERSAW),
+                "SSS",
+                "II ",
+                "   ",
+                'I', "blockCopper",
+                'S', "stickWood"
         );
     }
 

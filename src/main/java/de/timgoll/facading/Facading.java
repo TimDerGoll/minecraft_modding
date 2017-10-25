@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.SidedProxy;
 import de.timgoll.facading.proxy.CommonProxy;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = Facading.MODID, name = Facading.NAME, version = Facading.VERSION)
@@ -20,7 +21,7 @@ public class Facading {
 
 	public static final String MODID = "facading";
 	public static final String NAME = "Facading";
-	public static final String VERSION = "alpha_0.2";
+	public static final String VERSION = "alpha_0.3";
 
 	@Instance
 	public static Facading INSTANCE;

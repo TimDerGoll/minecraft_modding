@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import org.lwjgl.Sys;
 
 import java.awt.*;
 
@@ -27,6 +28,17 @@ public class GuiFacadingbenchContainer extends GuiContainer {
 
     GuiFacadingbenchButtons_preview previewPrev, previewNext;
     GuiFacadingbenchButtons_square addProduction, cancalProduction;
+
+    //GUI changing values
+
+    private int itemProduceTicks;
+    private int elapsedItemProduceTicks;
+    private int itemDisassembleTicks;
+    private int elapsedItemDisassembleTicks;
+    private int itemsMultiplier;
+    private boolean isPowered;
+
+    //GUI changing values END
 
     public GuiFacadingbenchContainer(InventoryPlayer player, TileBlockFacadingbench tileBlockFacadingbench) {
         super(new ContainerFacadingbench(player, tileBlockFacadingbench));
@@ -63,4 +75,19 @@ public class GuiFacadingbenchContainer extends GuiContainer {
         buttonList.add( cancalProduction = new GuiFacadingbenchButtons_square(CANCELPRODUCTION, topleftX + 35, topleftY +  56, 16, 225, 16,209));
         super.initGui();
     }
+
+    public void setPacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int itemsMultiplier, boolean isPowered) {
+        this.itemProduceTicks            = itemProduceTicks;
+        this.elapsedItemProduceTicks     = elapsedItemProduceTicks;
+        this.itemDisassembleTicks        = itemDisassembleTicks;
+        this.elapsedItemDisassembleTicks = elapsedItemDisassembleTicks;
+        this.itemsMultiplier             = itemsMultiplier;
+        this.isPowered                   = isPowered;
+
+        System.out.println("Message recieved, Station is powered: " + isPowered + "............................................................................");
+    }
+
+
+
+
 }
