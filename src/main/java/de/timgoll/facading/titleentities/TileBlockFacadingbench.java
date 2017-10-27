@@ -1,62 +1,40 @@
 package de.timgoll.facading.titleentities;
 
 import de.timgoll.facading.blocks.BlockFacadingbench;
-import net.minecraft.block.BlockFurnace;
+import de.timgoll.facading.init.ModRegistry;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nullable;
-
-public class TileBlockFacadingbench extends TileEntity implements ITickable {
-
-    private ItemStackHandler inventory = new ItemStackHandler(15);
-    private boolean waterPowerActivated = false;
+public class TileBlockFacadingbench extends TileBlockMachineBase {
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        inventory.deserializeNBT(compound.getCompoundTag("inventory"));
-        this.waterPowerActivated = compound.getBoolean("waterPowerActivated");
+        System.out.println("reading inventory OVERLAY ..............................");
 
-        BlockFacadingbench.setState(this.waterPowerActivated, this.world, this.pos);
+
+        super.readFromNBT(compound);
+        //more stuff here
+
+        System.out.println("reading inventory 6 ..............................");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setTag("inventory", inventory.serializeNBT());
-        compound.setBoolean("waterPowerActivated", waterPowerActivated);
+        //more stuff here
         return super.writeToNBT(compound);
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-    }
-
-    @Nullable
-    @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) inventory : super.getCapability(capability, facing);
-    }
-
-
     public void setWaterPowerActivated(boolean waterPowerActivated) {
-        this.waterPowerActivated = waterPowerActivated;
-        BlockFacadingbench.setState(this.waterPowerActivated, this.world, this.pos);
-    }
+        super.setWaterPowerActivated(waterPowerActivated);
 
-    public boolean getWaterPowerActivated() {
-        return this.waterPowerActivated;
+        BlockFacadingbench.setState(this.waterPowerActivated, this.machineIsWorking, this.world, this.pos);
     }
 
     @Override
     public void update() {
-        //System.out.println("hallo welt.......................................................");
+        super.update();
+        //System.out.println("main loop of entity");
     }
+
 }

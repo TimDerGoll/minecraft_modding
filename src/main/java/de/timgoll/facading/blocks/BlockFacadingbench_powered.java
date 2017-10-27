@@ -33,7 +33,7 @@ public class BlockFacadingbench_powered extends BlockFacadingbench {
         double d4 = rand.nextDouble() * 0.6D - 0.3D;
 
         //play working sound
-        world.playSound((double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, ModRegistry.SOUND_FACADINGBENCH_POWERED, SoundCategory.BLOCKS, 0.05F, 0.5F, false);
+        world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ModRegistry.SOUND_FACADINGBENCH_POWERED, SoundCategory.BLOCKS, 0.075F, 0.5F, false);
 
 
         world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
