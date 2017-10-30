@@ -53,7 +53,6 @@ public class Facading {
 	//Register TileEntities
 	public void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileBlockMachineBase.class, "tileentity_block_machinebase");
-		GameRegistry.registerTileEntity(TileBlockFacade.class, "tileentity_block_facade");
 		GameRegistry.registerTileEntity(TileBlockFacadingbench.class, "tileentity_block_facadingbench");
 	}
 }

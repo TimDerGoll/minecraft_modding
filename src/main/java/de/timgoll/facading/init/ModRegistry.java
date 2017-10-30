@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.timgoll.facading.Facading;
-import de.timgoll.facading.blocks.BlockFacade;
-import de.timgoll.facading.blocks.BlockFacadingbench;
-import de.timgoll.facading.blocks.BlockFacadingbench_powered;
-import de.timgoll.facading.blocks.BlockMachineFrame;
+import de.timgoll.facading.blocks.*;
 import de.timgoll.facading.items.*;
 import de.timgoll.facading.sounds.SoundHandler;
 import net.minecraft.block.Block;
@@ -35,16 +32,14 @@ public class ModRegistry {
 
 
 	//BLOCKS
-	public static final BlockFacade        BLOCK_FACADE                = new BlockFacade("facade");
-	public static final BlockMachineFrame  BLOCK_MACHINEFRAME          = new BlockMachineFrame("machineframe");
-	public static final BlockFacadingbench BLOCK_FACADINGBENCH         = new BlockFacadingbench("facadingbench");
-	public static final BlockFacadingbench_powered BLOCK_FACADINGBENCH_POWERED = new BlockFacadingbench_powered("facadingbench_powered");
+	public static final Block BLOCK_FACADE            = new BlockFacade("facade");
+	public static final Block BLOCK_MACHINEFRAME      = new BlockMachineFrame("machineframe");
+	public static final Block BLOCK_FACADINGBENCH     = new BlockFacadingbench("facadingbench");
 
 	//BLOCKITEMS
-	public static final Item ITEM_FACADE              = BLOCK_FACADE.registerBlockItem();
-	public static final Item ITEM_MACHINEFRAME        = BLOCK_MACHINEFRAME.registerBlockItem();
-	public static final Item ITEM_FACADINGBENCH       = BLOCK_FACADINGBENCH.registerBlockItem();
-	public static final Item ITEM_FACADINGBENCH_POWERED       = BLOCK_FACADINGBENCH_POWERED.registerBlockItem();
+	public static final Item ITEM_FACADE              = Item.getItemFromBlock(BLOCK_FACADE);
+	public static final Item ITEM_MACHINEFRAME        = Item.getItemFromBlock(BLOCK_MACHINEFRAME);
+	public static final Item ITEM_FACADINGBENCH       = Item.getItemFromBlock(BLOCK_FACADINGBENCH);
 
 	//ITEMS
 	public static final Item ITEM_HAMMER              = new ItemHammer("hammer");

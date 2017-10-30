@@ -18,21 +18,21 @@ public class BlockMachineFrame extends Block implements IHasModel {
 
         this.setUnlocalizedName(Facading.MODID + "." + name);
         this.setRegistryName(name);
-        this.setCreativeTab(ModRegistry.TAB);
 
+        //registering
         registerBlock();
+        registerBlockItem();
+
+        this.setCreativeTab(ModRegistry.TAB);
     }
 
     private void registerBlock() {
         ModRegistry.BLOCKS.add(this);
     }
 
-    public Item registerBlockItem() {
+    private void registerBlockItem() {
         Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
-
         ModRegistry.ITEMS.add(newItemBlock);
-
-        return newItemBlock;
     }
 
     /**

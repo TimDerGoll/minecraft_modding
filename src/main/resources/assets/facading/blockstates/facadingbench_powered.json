@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "facading:facadingbench_powered" },
-    "facing=south": { "model": "facading:facadingbench_powered", "y": 180 },
-    "facing=west":  { "model": "facading:facadingbench_powered", "y": 270 },
-    "facing=east":  { "model": "facading:facadingbench_powered", "y": 90 }
-  }
-}

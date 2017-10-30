@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "facing=north,type=default": { "model": "facading:facadingbench_default" },
+    "facing=north,type=powered": { "model": "facading:facadingbench_powered" },
+
+    "facing=south,type=default": { "model": "facading:facadingbench_default", "y": 180 },
+    "facing=south,type=powered": { "model": "facading:facadingbench_powered", "y": 180 },
+
+    "facing=west,type=default":  { "model": "facading:facadingbench_default", "y": 270 },
+    "facing=west,type=powered":  { "model": "facading:facadingbench_powered", "y": 270 },
+
+    "facing=east,type=default":  { "model": "facading:facadingbench_default", "y": 90 },
+    "facing=east,type=powered":  { "model": "facading:facadingbench_powered", "y": 90 }
+  }
+}

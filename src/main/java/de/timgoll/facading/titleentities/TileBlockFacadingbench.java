@@ -9,13 +9,8 @@ public class TileBlockFacadingbench extends TileBlockMachineBase {
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        System.out.println("reading inventory OVERLAY ..............................");
-
-
         super.readFromNBT(compound);
         //more stuff here
-
-        System.out.println("reading inventory 6 ..............................");
     }
 
     @Override
@@ -24,12 +19,6 @@ public class TileBlockFacadingbench extends TileBlockMachineBase {
         return super.writeToNBT(compound);
     }
 
-    @Override
-    public void setWaterPowerActivated(boolean waterPowerActivated) {
-        super.setWaterPowerActivated(waterPowerActivated);
-
-        BlockFacadingbench.setState(this.waterPowerActivated, this.machineIsWorking, this.world, this.pos);
-    }
 
     @Override
     public void update() {

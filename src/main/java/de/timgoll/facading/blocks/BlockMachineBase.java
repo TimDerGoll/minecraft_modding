@@ -3,6 +3,7 @@ package de.timgoll.facading.blocks;
 import de.timgoll.facading.Facading;
 import de.timgoll.facading.client.IHasModel;
 import de.timgoll.facading.init.ModRegistry;
+import de.timgoll.facading.misc.EnumHandler;
 import de.timgoll.facading.titleentities.TileBlockFacadingbench;
 import de.timgoll.facading.titleentities.TileBlockMachineBase;
 import net.minecraft.block.Block;
@@ -11,6 +12,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,22 +23,26 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockMachineBase extends Block implements IHasModel, ITileEntityProvider {
 
-    protected static final PropertyDirection FACING = BlockHorizontal.FACING;
+    protected static final PropertyDirection FACING = PropertyDirection.create("facing");
+    protected static final PropertyEnum      TYPE   = PropertyEnum.create("type", EnumHandler.MachineStates.class);
+
     protected static boolean keepInventory;
 
     public BlockMachineBase(String name) {
@@ -45,23 +51,24 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
 
         this.setUnlocalizedName(Facading.MODID + "." + name);
         this.setRegistryName(name);
-        this.setCreativeTab(ModRegistry.TAB);
 
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumHandler.MachineStates.DEFAULT));
 
+        //registering
         registerBlock();
+        registerBlockItem();
+
+        this.setCreativeTab(ModRegistry.TAB);
     }
 
     private void registerBlock() {
         ModRegistry.BLOCKS.add(this);
     }
 
-    public Item registerBlockItem() {
+    private void registerBlockItem() {
         Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
-
         ModRegistry.ITEMS.add(newItemBlock);
-
-        return newItemBlock;
     }
 
     /**
@@ -71,6 +78,26 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
     public void registerModels() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
+
+
+
+
+
+    public static void setState(World world, BlockPos pos, Enum type) {
+        IBlockState iblockstate = world.getBlockState(pos);
+        TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
+
+        keepInventory = true; //set keepInventory to true, so that the TE stores the data without dropping inv
+        world.setBlockState(pos, ModRegistry.BLOCK_FACADINGBENCH.getDefaultState().withProperty(FACING, iblockstate.getValue((FACING))).withProperty(TYPE, type), 2);
+        keepInventory = false;
+
+        if (te != null) {
+            te.validate();
+            world.setTileEntity(pos, te);
+        }
+    }
+
+
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
@@ -104,19 +131,71 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
         super.breakBlock(world, pos, state);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+        TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
+
+        System.out.println("te: " + te.getType().toString());
+        System.out.println("te: " + pos.toString());
+
+
+        if (te != null && te.getType() == EnumHandler.MachineStates.DEFAULT)
+            return;
+
+        EnumFacing enumfacing = state.getValue(FACING);
+        double d0 = (double)pos.getX() + 0.5D;
+        double d1 = (double)pos.getY() + rand.nextDouble() * 6.0D / 16.0D;
+        double d2 = (double)pos.getZ() + 0.5D;
+        double d3 = 0.52D;
+        double d4 = rand.nextDouble() * 0.6D - 0.3D;
+
+        //play working sound
+        world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ModRegistry.SOUND_FACADINGBENCH_POWERED, SoundCategory.BLOCKS, 0.075F, 0.5F, false);
+
+
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1 + 1.0D, d2 + d4, 0.0D, 0.1D, 0.0D);
+
+        switch (enumfacing) {
+            case WEST:
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.WATER_DROP, d0 - 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.CLOUD, d0 + 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, d0 + 0.75D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+                break;
+            case EAST:
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.WATER_DROP, d0 + 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.CLOUD,  d0 - 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.WATER_BUBBLE,  d0 - 0.75D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+                break;
+            case NORTH:
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 - 0.52D, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.WATER_DROP, d0 + d4, d1, d2 - 0.52D, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.CLOUD, d0 + d4, d1, d2 + 0.52D, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, d0 + d4, d1, d2 + 0.75D, 0.0D, 0.0D, 0.0D);
+                break;
+            case SOUTH:
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 + 0.52D, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.WATER_DROP, d0 + d4, d1, d2 + 0.52D, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.CLOUD, d0 + d4, d1, d2 - 0.52D, 0.0D, 0.0D, 0.0D);
+                world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, d0 + d4, d1, d2 - 0.75D, 0.0D, 0.0D, 0.0D);
+        }
+    }
+
     /**
      * Called after the block is set in the Chunk data, but before the Tile Entity is set
      */
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        this.setDefaultFacing(worldIn, pos, state);
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        this.setDefaultFacing(world, pos, state);
     }
 
-    private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state) {
-        if (!worldIn.isRemote) {
-            IBlockState iblockstate  = worldIn.getBlockState(pos.north());
-            IBlockState iblockstate1 = worldIn.getBlockState(pos.south());
-            IBlockState iblockstate2 = worldIn.getBlockState(pos.west());
-            IBlockState iblockstate3 = worldIn.getBlockState(pos.east());
+    private void setDefaultFacing(World world, BlockPos pos, IBlockState state) {
+        if (!world.isRemote) {
+            IBlockState iblockstate  = world.getBlockState(pos.north());
+            IBlockState iblockstate1 = world.getBlockState(pos.south());
+            IBlockState iblockstate2 = world.getBlockState(pos.west());
+            IBlockState iblockstate3 = world.getBlockState(pos.east());
 
             EnumFacing enumfacing    = state.getValue(FACING);
 
@@ -130,7 +209,12 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
                 enumfacing = EnumFacing.WEST;
             }
 
-            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+            TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
+
+            if (te == null)
+                world.setBlockState(pos, state.withProperty(FACING, enumfacing), 1);
+            else
+                world.setBlockState(pos, state.withProperty(FACING, enumfacing).withProperty(TYPE, te.getType()), 2);
         }
     }
 
@@ -138,7 +222,12 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
      * Called by ItemBlocks after a block is set in the world, to allow post-place logic
      */
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+        TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
+
+        if (te == null)
+            world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 1);
+        else
+            world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(TYPE, te.getType()), 2);
 
         detectWaterBlock(placer.getHorizontalFacing().getOpposite().getDirectionVec(), world, pos);
     }
@@ -165,8 +254,21 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
      */
     @SuppressWarnings("deprecation")
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
+
+        if (te == null)
+            return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+        else
+            return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(TYPE, te.getType());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
+
+        return state.withProperty(TYPE, te.getType());
     }
 
     /**
@@ -191,7 +293,7 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
      * Register Block-State for rotation
      */
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[] {FACING});
+        return new BlockStateContainer(this, new IProperty[] {FACING, TYPE});
     }
 
     /**
@@ -215,6 +317,7 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
     }
 
     private void detectWaterBlock(Vec3i facingvector, World world, BlockPos pos) {
+        System.out.println("detect water block");
 
         if (world.isRemote) //just check on server, abort
             return;

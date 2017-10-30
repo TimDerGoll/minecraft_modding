@@ -2,10 +2,10 @@
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
         "particle": "facading:blocks/facadingbench_front",
-        "0": "facading:blocks/facadingbench_front_powered",
+        "0": "facading:blocks/facadingbench_front",
         "1": "facading:blocks/facadingbench_right",
         "2": "facading:blocks/facadingbench_left",
-        "3": "facading:blocks/facadingbench_back_powered",
+        "3": "facading:blocks/facadingbench_back",
         "4": "facading:blocks/defaultblock",
         "5": "facading:blocks/facadingbench_top"
     },
