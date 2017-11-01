@@ -57,7 +57,6 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
 
         //registering
         registerBlock();
-        registerBlockItem();
 
         this.setCreativeTab(ModRegistry.TAB);
     }
@@ -66,9 +65,11 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
         ModRegistry.BLOCKS.add(this);
     }
 
-    private void registerBlockItem() {
+    public Item registerBlockItem() {
         Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
         ModRegistry.ITEMS.add(newItemBlock);
+
+        return newItemBlock;
     }
 
     /**
@@ -83,12 +84,14 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
 
 
 
-    public static void setState(World world, BlockPos pos, Enum type) {
+    public static void setState(World world, BlockPos pos) {
         IBlockState iblockstate = world.getBlockState(pos);
         TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
 
+
+
         keepInventory = true; //set keepInventory to true, so that the TE stores the data without dropping inv
-        world.setBlockState(pos, ModRegistry.BLOCK_FACADINGBENCH.getDefaultState().withProperty(FACING, iblockstate.getValue((FACING))).withProperty(TYPE, type), 2);
+        world.setBlockState(pos, world.getBlockState(pos).getBlock().getDefaultState().withProperty(FACING, iblockstate.getValue((FACING))).withProperty(TYPE, te.getType()), 2);
         keepInventory = false;
 
         if (te != null) {
@@ -135,9 +138,6 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
     @Override
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
         TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
-
-        System.out.println("te: " + te.getType().toString());
-        System.out.println("te: " + pos.toString());
 
 
         if (te != null && te.getType() == EnumHandler.MachineStates.DEFAULT)
@@ -277,7 +277,7 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
      */
     @SuppressWarnings("deprecation")
     public IBlockState withRotation(IBlockState state, Rotation rot) {
-        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
+        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING))).withProperty(TYPE, state.getValue(TYPE));
     }
 
     /**
@@ -286,7 +286,7 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
      */
     @SuppressWarnings("deprecation")
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING))).withProperty(TYPE, state.getValue(TYPE));
     }
 
     /**
@@ -328,7 +328,7 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
         //TODO: get water flow vector
 
         //Detect activation and store value in TileEntity
-        TileBlockFacadingbench te = (TileBlockFacadingbench) world.getTileEntity(pos);
+        TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
         if (te != null) {
             boolean waterSource = adjacentBlock.equals(Blocks.WATER) || adjacentBlock.equals(Blocks.FLOWING_WATER);
             te.setWaterPowerActivated(waterSource); //true or false

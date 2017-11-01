@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.ArrayList;
+
 public class RecipeHandler {
 
     public void registerRecipes() {
@@ -22,6 +24,11 @@ public class RecipeHandler {
         addMachineframe();
         addFacadingbench();
 
+
+
+        addFacade();
+        addPlaceholder();
+        addPlaceholder2();
     }
 
     /* ** RECIPES ** */
@@ -195,6 +202,56 @@ public class RecipeHandler {
             'T', ModRegistry.ITEM_TOOLHOLDER,
             'W', "plankWood",
             'S', "stone"
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+
+    // CUSTOM CRAFTING METHODS
+    private void addFacade() {
+        RecipeHandlerFacadingBench.addRecipe(
+                new ItemStack(ModRegistry.BLOCK_FACADE, 8),
+                new ArrayList<ItemStack>() {
+                    {
+                        add(new ItemStack(ModRegistry.ITEM_NAIL, 64));
+                        add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
+                    }
+                },
+                100
+        );
+    }
+
+    private void addPlaceholder() {
+        RecipeHandlerFacadingBench.addRecipe(
+                new ItemStack(Blocks.BOOKSHELF, 8),
+                new ArrayList<ItemStack>() {
+                    {
+                        add(new ItemStack(ModRegistry.ITEM_NAIL, 64));
+                        add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
+                    }
+                },
+                1000
+        );
+    }
+
+    private void addPlaceholder2() {
+        RecipeHandlerFacadingBench.addRecipe(
+                new ItemStack(Blocks.STONE, 8),
+                new ArrayList<ItemStack>() {
+                    {
+                        add(new ItemStack(ModRegistry.ITEM_NAIL, 64));
+                        add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
+                    }
+                },
+                10
         );
     }
 }

@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "facing=west": { "model": "facading:industriallamp_wall", "y": 90 },
+    "facing=east": { "model": "facading:industriallamp_wall", "y": 270 },
+    "facing=north":  { "model": "facading:industriallamp_wall", "y": 180 },
+    "facing=south":  { "model": "facading:industriallamp_wall" },
+    "facing=up":  { "model": "facading:industriallamp", "x": 180 },
+    "facing=down":  { "model": "facading:industriallamp" },
+
+
+
+
+    "inventory": {
+      "model": "facading:industriallamp",
+      "transform": "forge:default-block"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-package de.timgoll.facading.network;
+package de.timgoll.facading.network.facadingbench;
 
 import de.timgoll.facading.client.gui.GuiFacadingbenchContainer;
 import de.timgoll.facading.client.gui.GuiHandler;
@@ -21,6 +21,7 @@ public class PacketGuiOpened implements IMessage {
     private int itemDisassembleTicks;
     private int elapsedItemDisassembleTicks;
     private int itemsMultiplier;
+    private int outputBlocks_index_producing;
     private boolean isPowered;
 
     //data to transmit END
@@ -38,13 +39,14 @@ public class PacketGuiOpened implements IMessage {
      * @param elapsedItemDisassembleTicks ticks elapsed since disassbly started
      * @param itemsMultiplier how much to produce
      */
-    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int itemsMultiplier, boolean isPowered) {
-        this.itemProduceTicks            = itemProduceTicks;
-        this.elapsedItemProduceTicks     = elapsedItemProduceTicks;
-        this.itemDisassembleTicks        = itemDisassembleTicks;
-        this.elapsedItemDisassembleTicks = elapsedItemDisassembleTicks;
-        this.itemsMultiplier             = itemsMultiplier;
-        this.isPowered                   = isPowered;
+    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int itemsMultiplier, int outputBlocks_index_producing, boolean isPowered) {
+        this.itemProduceTicks             = itemProduceTicks;
+        this.elapsedItemProduceTicks      = elapsedItemProduceTicks;
+        this.itemDisassembleTicks         = itemDisassembleTicks;
+        this.elapsedItemDisassembleTicks  = elapsedItemDisassembleTicks;
+        this.itemsMultiplier              = itemsMultiplier;
+        this.outputBlocks_index_producing = outputBlocks_index_producing;
+        this.isPowered                    = isPowered;
 
         this.isValid = true;
     }
@@ -58,6 +60,7 @@ public class PacketGuiOpened implements IMessage {
         buf.writeInt(this.itemDisassembleTicks);
         buf.writeInt(this.elapsedItemDisassembleTicks);
         buf.writeInt(this.itemsMultiplier);
+        buf.writeInt(this.outputBlocks_index_producing);
         buf.writeBoolean(this.isPowered);
     }
 
@@ -65,12 +68,13 @@ public class PacketGuiOpened implements IMessage {
     public void fromBytes(ByteBuf buf) {
         try {
 
-            this.itemProduceTicks            = buf.readInt();
-            this.elapsedItemProduceTicks     = buf.readInt();
-            this.itemDisassembleTicks        = buf.readInt();
-            this.elapsedItemDisassembleTicks = buf.readInt();
-            this.itemsMultiplier             = buf.readInt();
-            this.isPowered                   = buf.readBoolean();
+            this.itemProduceTicks             = buf.readInt();
+            this.elapsedItemProduceTicks      = buf.readInt();
+            this.itemDisassembleTicks         = buf.readInt();
+            this.elapsedItemDisassembleTicks  = buf.readInt();
+            this.itemsMultiplier              = buf.readInt();
+            this.outputBlocks_index_producing = buf.readInt();
+            this.isPowered                    = buf.readBoolean();
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
@@ -102,6 +106,7 @@ public class PacketGuiOpened implements IMessage {
                     message.itemDisassembleTicks,
                     message.elapsedItemDisassembleTicks,
                     message.itemsMultiplier,
+                    message.outputBlocks_index_producing,
                     message.isPowered
             );
 

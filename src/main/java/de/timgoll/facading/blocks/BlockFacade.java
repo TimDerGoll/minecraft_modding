@@ -39,7 +39,6 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
         this.setUnlocalizedName(Facading.MODID + "." + name);
 
         registerBlock();
-        registerBlockItem();
 
         this.setCreativeTab(ModRegistry.TAB);
     }
@@ -48,9 +47,11 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
         ModRegistry.BLOCKS.add(this);
     }
 
-    private void registerBlockItem() {
+    public Item registerBlockItem() {
         Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
         ModRegistry.ITEMS.add(newItemBlock);
+
+        return newItemBlock;
     }
 
     //register default generated item for Block

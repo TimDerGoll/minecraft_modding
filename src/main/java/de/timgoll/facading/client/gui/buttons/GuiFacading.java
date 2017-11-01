@@ -7,9 +7,9 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiFacading extends GuiButton {
     final ResourceLocation texture;
-    private int x, y, textureX, textureY, textureX_hover, textureY_hover;
+    private int x, y, textureX, textureY, textureX_hover, textureY_hover, textureX_enable, textureY_enable;
 
-    public GuiFacading(int buttonId, int x, int y, int textureX, int textureY, int textureX_hover, int textureY_hover, int width, int height, String resourcePath) {
+    public GuiFacading(int buttonId, int x, int y, int textureX, int textureY, int textureX_hover, int textureY_hover, int textureX_enable, int textureY_enable, int width, int height, String resourcePath) {
         super(buttonId, x, y, width, height, "");
         this.x = x;
         this.y = y;
@@ -17,6 +17,8 @@ public class GuiFacading extends GuiButton {
         this.textureY = textureY;
         this.textureX_hover = textureX_hover;
         this.textureY_hover = textureY_hover;
+        this.textureX_enable = textureX_enable;
+        this.textureY_enable = textureY_enable;
 
         texture = new ResourceLocation(Facading.MODID, resourcePath);
     }
@@ -33,7 +35,10 @@ public class GuiFacading extends GuiButton {
             } else {
                 hovered = false;
             }
-            if (hovered) {
+            if (!enabled) {
+                textureX_tmp = textureX_enable;
+                textureY_tmp = textureY_enable;
+            } else if(hovered) {
                 textureX_tmp = textureX_hover;
                 textureY_tmp = textureY_hover;
             } else {

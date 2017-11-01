@@ -1,10 +1,11 @@
 package de.timgoll.facading.misc;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 
 public class EnumHandler {
 
-    public static enum MachineStates implements IStringSerializable {
+    public enum MachineStates implements IStringSerializable {
         DEFAULT("default", 0),
         POWERED("powered", 1),
         WORKING("working", 2);

@@ -1,5 +1,11 @@
 {
+  "forge_marker": 1,
   "variants": {
-    "normal": { "model": "facading:machineframe" }
+    "normal": { "model": "facading:machineframe" },
+
+    "inventory": {
+      "model": "facading:machineframe",
+      "transform": "forge:default-block"
+    }
   }
 }

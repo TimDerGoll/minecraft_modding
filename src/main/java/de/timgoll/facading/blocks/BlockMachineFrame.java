@@ -21,7 +21,6 @@ public class BlockMachineFrame extends Block implements IHasModel {
 
         //registering
         registerBlock();
-        registerBlockItem();
 
         this.setCreativeTab(ModRegistry.TAB);
     }
@@ -30,9 +29,11 @@ public class BlockMachineFrame extends Block implements IHasModel {
         ModRegistry.BLOCKS.add(this);
     }
 
-    private void registerBlockItem() {
+    public Item registerBlockItem() {
         Item newItemBlock = new ItemBlock(this).setRegistryName(getRegistryName());
         ModRegistry.ITEMS.add(newItemBlock);
+
+        return newItemBlock;
     }
 
     /**

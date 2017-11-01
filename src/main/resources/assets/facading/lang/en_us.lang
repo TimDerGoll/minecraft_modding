@@ -5,7 +5,10 @@ itemGroup.facading=Facading
 tile.facading.facade.name=Facade
 tile.facading.machineframe.name=Machineframe
 tile.facading.facadingbench.name=Facadingbench
-tile.facading.facadingbench_powered.name=Facadingbench (powered)
+tile.facading.press.name=Press
+
+tile.facading.flatlamp.name=Flatlamp
+tile.facading.industriallamp.name=Industriallamp
 
 #Items
 item.facading.hammer.name=Facading Hammer
@@ -17,7 +20,7 @@ item.facading.diamondcircularsaw.name=Diamond Circularsaw
 item.facading.flintwoodcutter.name=Flint Woodcutter
 item.facading.nethersaw.name=Nethersaw
 item.facading.irontoothsaw.name=Iron Toothsaw
-item.facading.nails.name=Nails
+item.facading.nail.name=Nail
 item.facading.pileofnails.name=Pile of Nails
 item.facading.boxofnails.name=Box of Nails
 item.facading.stonepress.name=Stonepress

@@ -1,5 +1,6 @@
 package de.timgoll.facading.network;
 
+import de.timgoll.facading.network.facadingbench.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,10 +19,14 @@ public class PacketHandler {
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(channelName);
 
         // Server packets
-        //INSTANCE.registerMessage(PacketGetWorker.Handler.class, PacketGetWorker.class, nextID(), Side.SERVER);
+        INSTANCE.registerMessage(PacketGuiOpenedRequest.Handler.class, PacketGuiOpenedRequest.class, nextID(), Side.SERVER);
+        INSTANCE.registerMessage(PacketGuiCancelProductionRequest.Handler.class, PacketGuiCancelProductionRequest.class, nextID(), Side.SERVER);
+        INSTANCE.registerMessage(PacketGuiAddProductionRequest.Handler.class, PacketGuiAddProductionRequest.class, nextID(), Side.SERVER);
 
         // Client packets
         INSTANCE.registerMessage(PacketGuiOpened.Handler.class, PacketGuiOpened.class, nextID(), Side.CLIENT);
+        INSTANCE.registerMessage(PacketGuiCancelProduction.Handler.class, PacketGuiCancelProduction.class, nextID(), Side.CLIENT);
+        INSTANCE.registerMessage(PacketGuiAddProduction.Handler.class, PacketGuiAddProduction.class, nextID(), Side.CLIENT);
     }
 
 }

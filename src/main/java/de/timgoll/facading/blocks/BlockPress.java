@@ -4,8 +4,8 @@ import de.timgoll.facading.Facading;
 import de.timgoll.facading.client.gui.GuiHandler;
 import de.timgoll.facading.init.ModRegistry;
 import de.timgoll.facading.titleentities.TileBlockFacadingbench;
+import de.timgoll.facading.titleentities.TileBlockPress;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,9 +19,9 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockFacadingbench extends BlockMachineBase {
+public class BlockPress extends BlockMachineBase {
 
-    public BlockFacadingbench(String name) {
+    public BlockPress(String name) {
         super(name);
     }
 
@@ -33,13 +33,11 @@ public class BlockFacadingbench extends BlockMachineBase {
      */
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote) {
-            TileBlockFacadingbench te = (TileBlockFacadingbench) world.getTileEntity(pos);
+        //TileBlockFacadingbench te = (TileBlockFacadingbench) world.getTileEntity(pos);
 
-            if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) { //North is just a placeholder, direction irrelevant
-                player.openGui(Facading.INSTANCE, GuiHandler.GUI_FACADING_CONTAINER_ID, world, pos.getX(), pos.getY(), pos.getZ());
-            }
-        }
+        //if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) { //North is just a placeholder, direction irrelevant
+        //    player.openGui(Facading.INSTANCE, GuiHandler.GUI_FACADING_CONTAINER_ID, world, pos.getX(), pos.getY(), pos.getZ());
+        //}
 
         return true;
     }
@@ -50,7 +48,7 @@ public class BlockFacadingbench extends BlockMachineBase {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileBlockFacadingbench();
+        return new TileBlockPress();
     }
 
 }

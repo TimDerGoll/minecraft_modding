@@ -32,14 +32,20 @@ public class ModRegistry {
 
 
 	//BLOCKS
-	public static final Block BLOCK_FACADE            = new BlockFacade("facade");
-	public static final Block BLOCK_MACHINEFRAME      = new BlockMachineFrame("machineframe");
-	public static final Block BLOCK_FACADINGBENCH     = new BlockFacadingbench("facadingbench");
+	public static final BlockLampFlat       BLOCK_LAMPFLAT       = new BlockLampFlat("flatlamp");
+	public static final BlockLampIndustrial BLOCK_LAMPINDUSTRIAL = new BlockLampIndustrial("industriallamp");
+	public static final BlockFacade         BLOCK_FACADE         = new BlockFacade("facade");
+	public static final BlockMachineFrame   BLOCK_MACHINEFRAME   = new BlockMachineFrame("machineframe");
+	public static final BlockFacadingbench  BLOCK_FACADINGBENCH  = new BlockFacadingbench("facadingbench");
+	public static final BlockPress          BLOCK_PRESS          = new BlockPress("press");
 
 	//BLOCKITEMS
-	public static final Item ITEM_FACADE              = Item.getItemFromBlock(BLOCK_FACADE);
-	public static final Item ITEM_MACHINEFRAME        = Item.getItemFromBlock(BLOCK_MACHINEFRAME);
-	public static final Item ITEM_FACADINGBENCH       = Item.getItemFromBlock(BLOCK_FACADINGBENCH);
+	public static final Item ITEM_LAMPFLAT            = BLOCK_LAMPFLAT.registerBlockItem();
+	public static final Item ITEM_MAPINDUSTRIAL       = BLOCK_LAMPINDUSTRIAL.registerBlockItem();
+	public static final Item ITEM_FACADE              = BLOCK_FACADE.registerBlockItem();
+	public static final Item ITEM_MACHINEFRAME        = BLOCK_MACHINEFRAME.registerBlockItem();
+	public static final Item ITEM_FACADINGBENCH       = BLOCK_FACADINGBENCH.registerBlockItem();
+	public static final Item ITEM_PRESS               = BLOCK_PRESS.registerBlockItem();
 
 	//ITEMS
 	public static final Item ITEM_HAMMER              = new ItemHammer("hammer");

@@ -2,7 +2,9 @@ package de.timgoll.facading.container;
 
 import de.timgoll.facading.container.slots.SlotFacadingbench;
 import de.timgoll.facading.init.ModRegistry;
-import de.timgoll.facading.network.PacketGuiOpened;
+import de.timgoll.facading.network.facadingbench.PacketGuiAddProduction;
+import de.timgoll.facading.network.facadingbench.PacketGuiCancelProduction;
+import de.timgoll.facading.network.facadingbench.PacketGuiOpened;
 import de.timgoll.facading.network.PacketHandler;
 import de.timgoll.facading.titleentities.TileBlockFacadingbench;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,11 +13,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -35,6 +35,10 @@ public class ContainerFacadingbench extends Container {
     private int UNCRAFTSHIFT = 56;
     private int TOOLSHIFT = 19;
     private int SHITLEFTOUTPUT = 98;
+
+    private EntityPlayer player;
+    private World world;
+    private TileBlockFacadingbench tileBlockFacadingbench;
 
     public ContainerFacadingbench(InventoryPlayer inventoryPlayer, TileBlockFacadingbench tileBlockFacadingbench) {
         if (tileBlockFacadingbench.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
@@ -80,22 +84,11 @@ public class ContainerFacadingbench extends Container {
             }
 
             //Handle data transfer
-            EntityPlayer player = inventoryPlayer.player;
-            World world = player.world;
+            this.player = inventoryPlayer.player;
+            this.world = player.world;
+            this.tileBlockFacadingbench = tileBlockFacadingbench;
 
-            if (!world.isRemote) {
-                PacketHandler.INSTANCE.sendTo(
-                    new PacketGuiOpened(
-                            1,
-                            2,
-                            3,
-                            4,
-                            5,
-                            tileBlockFacadingbench.getWaterPowerActivated()
-                    ),
-                    (EntityPlayerMP) player
-                );
-            }
+
         }
     }
 
@@ -168,4 +161,54 @@ public class ContainerFacadingbench extends Container {
     public boolean canInteractWith(EntityPlayer player) {
         return true;
     }
+
+
+
+
+    //NETWORKING STUFF
+    public void guiOpened() {
+        if (!this.world.isRemote) {
+            PacketHandler.INSTANCE.sendTo(
+                new PacketGuiOpened(
+                    1,
+                    2,
+                    3,
+                    4,
+                    this.tileBlockFacadingbench.getOutputBlocks_amount(),
+                    this.tileBlockFacadingbench.getOutputBlocks_index_producing(),
+                    this.tileBlockFacadingbench.getWaterPowerActivated()
+                ),
+                (EntityPlayerMP) this.player
+            );
+        }
+    }
+
+    public void productionCanceled() {
+        this.tileBlockFacadingbench.cancelProduction();
+
+        if (!this.world.isRemote) {
+            PacketHandler.INSTANCE.sendTo(
+                new PacketGuiCancelProduction(
+                    this.tileBlockFacadingbench.getOutputBlocks_amount(),
+                    this.tileBlockFacadingbench.getOutputBlocks_index_producing()
+                ),
+                (EntityPlayerMP) this.player
+            );
+        }
+    }
+
+    public void productionAdded(int outputBlocks_index) {
+        this.tileBlockFacadingbench.addProduction(outputBlocks_index);
+
+        if (!this.world.isRemote) {
+            PacketHandler.INSTANCE.sendTo(
+                new PacketGuiAddProduction(
+                    this.tileBlockFacadingbench.getOutputBlocks_amount(),
+                    this.tileBlockFacadingbench.getOutputBlocks_index_producing()
+                ),
+                (EntityPlayerMP) this.player
+            );
+        }
+    }
+
 }

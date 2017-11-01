@@ -4,6 +4,7 @@ import de.timgoll.facading.client.gui.GuiHandler;
 import de.timgoll.facading.titleentities.TileBlockFacade;
 import de.timgoll.facading.titleentities.TileBlockFacadingbench;
 import de.timgoll.facading.titleentities.TileBlockMachineBase;
+import de.timgoll.facading.titleentities.TileBlockPress;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -52,7 +53,8 @@ public class Facading {
 
 	//Register TileEntities
 	public void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileBlockMachineBase.class, "tileentity_block_machinebase");
+		GameRegistry.registerTileEntity(TileBlockFacade.class, "tileentity_block_facade");
 		GameRegistry.registerTileEntity(TileBlockFacadingbench.class, "tileentity_block_facadingbench");
+		GameRegistry.registerTileEntity(TileBlockPress.class, "tileentity_block_press");
 	}
 }
