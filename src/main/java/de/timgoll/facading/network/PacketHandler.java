@@ -27,6 +27,8 @@ public class PacketHandler {
         INSTANCE.registerMessage(PacketGuiOpened.Handler.class, PacketGuiOpened.class, nextID(), Side.CLIENT);
         INSTANCE.registerMessage(PacketGuiCancelProduction.Handler.class, PacketGuiCancelProduction.class, nextID(), Side.CLIENT);
         INSTANCE.registerMessage(PacketGuiAddProduction.Handler.class, PacketGuiAddProduction.class, nextID(), Side.CLIENT);
+        INSTANCE.registerMessage(PacketGuiStartedProduction.Handler.class, PacketGuiStartedProduction.class, nextID(), Side.CLIENT);
+        INSTANCE.registerMessage(PackedGuiFinishedProduction.Handler.class, PackedGuiFinishedProduction.class, nextID(), Side.CLIENT);
     }
 
 }

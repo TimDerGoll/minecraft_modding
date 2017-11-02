@@ -86,6 +86,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
     public void cancelProduction() {
         outputBlocks_amount = 0;
+        elapsedTicks = 0;
     }
 
     public int getOutputBlocks_amount() {

@@ -1,6 +1,7 @@
 package de.timgoll.facading.proxy;
 
 import de.timgoll.facading.client.IHasModel;
+import de.timgoll.facading.client.gui.GuiFacadingbenchContainer;
 import de.timgoll.facading.init.ModRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -17,6 +18,7 @@ public class ClientProxy extends CommonProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(GuiFacadingbenchContainer.class); //Tickingevent
 	}
 
 	@Override

@@ -2,7 +2,12 @@ package de.timgoll.facading.titleentities;
 
 import de.timgoll.facading.blocks.BlockMachineBase;
 import de.timgoll.facading.misc.RecipeHandlerFacadingBench;
+import de.timgoll.facading.network.PacketHandler;
+import de.timgoll.facading.network.facadingbench.PackedGuiFinishedProduction;
+import de.timgoll.facading.network.facadingbench.PacketGuiStartedProduction;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class TileBlockFacadingbench extends TileBlockMachineBase {
 
@@ -32,8 +37,15 @@ public class TileBlockFacadingbench extends TileBlockMachineBase {
                 BlockMachineBase.setState(this.world, this.pos);
             }
 
+            if (elapsedTicks == 0) { //new production started
+                startedProductionMessage(
+                        RecipeHandlerFacadingBench.productionTime.get(outputBlocks_index_producing)
+                );
+            }
+
             elapsedTicks++;
-            if (elapsedTicks >= RecipeHandlerFacadingBench.productionTime.get(outputBlocks_index_producing)) {
+
+            if (elapsedTicks >= RecipeHandlerFacadingBench.productionTime.get(outputBlocks_index_producing)) { //production finished
                 inventory.insertItem(
                         11,
                         RecipeHandlerFacadingBench.outputStack.get(outputBlocks_index_producing).copy(),
@@ -41,6 +53,8 @@ public class TileBlockFacadingbench extends TileBlockMachineBase {
                 );
                 elapsedTicks = 0;
                 outputBlocks_amount--;
+
+                finishedProductionMessage();
             }
         } else {
             if (machineIsWorking) {
@@ -50,6 +64,34 @@ public class TileBlockFacadingbench extends TileBlockMachineBase {
         }
 
 
+    }
+
+
+
+    private void startedProductionMessage(int productionTicks) {
+        if (!this.world.isRemote) {
+            BlockPos pos = this.getPos();
+
+            PacketHandler.INSTANCE.sendToAllAround(
+                    new PacketGuiStartedProduction(
+                            productionTicks
+                    ),
+                    new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
+            );
+        }
+    }
+
+    private void finishedProductionMessage() {
+        if (!this.world.isRemote) {
+            BlockPos pos = this.getPos();
+
+            PacketHandler.INSTANCE.sendToAllAround(
+                    new PackedGuiFinishedProduction(
+                            outputBlocks_amount
+                    ),
+                    new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
+            );
+        }
     }
 
 }

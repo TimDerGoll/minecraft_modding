@@ -15,7 +15,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -187,12 +189,14 @@ public class ContainerFacadingbench extends Container {
         this.tileBlockFacadingbench.cancelProduction();
 
         if (!this.world.isRemote) {
-            PacketHandler.INSTANCE.sendTo(
+            BlockPos pos = this.tileBlockFacadingbench.getPos();
+
+            PacketHandler.INSTANCE.sendToAllAround(
                 new PacketGuiCancelProduction(
                     this.tileBlockFacadingbench.getOutputBlocks_amount(),
                     this.tileBlockFacadingbench.getOutputBlocks_index_producing()
                 ),
-                (EntityPlayerMP) this.player
+                new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
             );
         }
     }
@@ -201,12 +205,14 @@ public class ContainerFacadingbench extends Container {
         this.tileBlockFacadingbench.addProduction(outputBlocks_index);
 
         if (!this.world.isRemote) {
-            PacketHandler.INSTANCE.sendTo(
+            BlockPos pos = this.tileBlockFacadingbench.getPos();
+
+            PacketHandler.INSTANCE.sendToAllAround(
                 new PacketGuiAddProduction(
                     this.tileBlockFacadingbench.getOutputBlocks_amount(),
                     this.tileBlockFacadingbench.getOutputBlocks_index_producing()
                 ),
-                (EntityPlayerMP) this.player
+                    new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
             );
         }
     }

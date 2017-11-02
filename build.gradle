@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "alpha_0.3"
+version = "alpha_0.4"
 group = "de.timgoll.facading" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "facading"
 

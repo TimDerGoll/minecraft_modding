@@ -20,7 +20,7 @@ public class PacketGuiOpened implements IMessage {
     private int elapsedItemProduceTicks;
     private int itemDisassembleTicks;
     private int elapsedItemDisassembleTicks;
-    private int itemsMultiplier;
+    private int outputBlocks_amount;
     private int outputBlocks_index_producing;
     private boolean isPowered;
 
@@ -37,14 +37,14 @@ public class PacketGuiOpened implements IMessage {
      * @param elapsedItemProduceTicks ticks elapsed since this production started
      * @param itemDisassembleTicks ticks needed to disassemble ItemStack
      * @param elapsedItemDisassembleTicks ticks elapsed since disassbly started
-     * @param itemsMultiplier how much to produce
+     * @param outputBlocks_amount how much to produce
      */
-    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int itemsMultiplier, int outputBlocks_index_producing, boolean isPowered) {
+    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int outputBlocks_amount, int outputBlocks_index_producing, boolean isPowered) {
         this.itemProduceTicks             = itemProduceTicks;
         this.elapsedItemProduceTicks      = elapsedItemProduceTicks;
         this.itemDisassembleTicks         = itemDisassembleTicks;
         this.elapsedItemDisassembleTicks  = elapsedItemDisassembleTicks;
-        this.itemsMultiplier              = itemsMultiplier;
+        this.outputBlocks_amount          = outputBlocks_amount;
         this.outputBlocks_index_producing = outputBlocks_index_producing;
         this.isPowered                    = isPowered;
 
@@ -59,7 +59,7 @@ public class PacketGuiOpened implements IMessage {
         buf.writeInt(this.elapsedItemProduceTicks);
         buf.writeInt(this.itemDisassembleTicks);
         buf.writeInt(this.elapsedItemDisassembleTicks);
-        buf.writeInt(this.itemsMultiplier);
+        buf.writeInt(this.outputBlocks_amount);
         buf.writeInt(this.outputBlocks_index_producing);
         buf.writeBoolean(this.isPowered);
     }
@@ -72,7 +72,7 @@ public class PacketGuiOpened implements IMessage {
             this.elapsedItemProduceTicks      = buf.readInt();
             this.itemDisassembleTicks         = buf.readInt();
             this.elapsedItemDisassembleTicks  = buf.readInt();
-            this.itemsMultiplier              = buf.readInt();
+            this.outputBlocks_amount = buf.readInt();
             this.outputBlocks_index_producing = buf.readInt();
             this.isPowered                    = buf.readBoolean();
 
@@ -105,7 +105,7 @@ public class PacketGuiOpened implements IMessage {
                     message.elapsedItemProduceTicks,
                     message.itemDisassembleTicks,
                     message.elapsedItemDisassembleTicks,
-                    message.itemsMultiplier,
+                    message.outputBlocks_amount,
                     message.outputBlocks_index_producing,
                     message.isPowered
             );
