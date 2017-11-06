@@ -33,8 +33,12 @@ public class ItemNetherSaw extends Item implements IHasModel {
     @Override
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, playerIn, tooltip, advanced);
-        String tooltip_text = new TextComponentTranslation("tooltip.nethersaw.text").getFormattedText();
+        String tooltip_text = new TextComponentTranslation("tooltip.upgrade_nether.text").getFormattedText();
         tooltip.add(tooltip_text);
+    }
+
+    public int getMultiplier() {
+        return 35;
     }
 
 }

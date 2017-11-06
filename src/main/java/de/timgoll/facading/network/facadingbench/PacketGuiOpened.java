@@ -1,7 +1,6 @@
 package de.timgoll.facading.network.facadingbench;
 
-import de.timgoll.facading.client.gui.GuiFacadingbenchContainer;
-import de.timgoll.facading.client.gui.GuiHandler;
+import de.timgoll.facading.client.gui.GuiMachineBase;
 import de.timgoll.facading.util.Utils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -23,6 +22,8 @@ public class PacketGuiOpened implements IMessage {
     private int outputBlocks_amount;
     private int outputBlocks_index_producing;
     private boolean isPowered;
+    private boolean isWorking;
+    private boolean isDisassembling;
 
     //data to transmit END
 
@@ -39,7 +40,7 @@ public class PacketGuiOpened implements IMessage {
      * @param elapsedItemDisassembleTicks ticks elapsed since disassbly started
      * @param outputBlocks_amount how much to produce
      */
-    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int outputBlocks_amount, int outputBlocks_index_producing, boolean isPowered) {
+    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int outputBlocks_amount, int outputBlocks_index_producing, boolean isPowered, boolean isWorking, boolean isDisassembling) {
         this.itemProduceTicks             = itemProduceTicks;
         this.elapsedItemProduceTicks      = elapsedItemProduceTicks;
         this.itemDisassembleTicks         = itemDisassembleTicks;
@@ -47,6 +48,8 @@ public class PacketGuiOpened implements IMessage {
         this.outputBlocks_amount          = outputBlocks_amount;
         this.outputBlocks_index_producing = outputBlocks_index_producing;
         this.isPowered                    = isPowered;
+        this.isWorking                    = isWorking;
+        this.isDisassembling              = isDisassembling;
 
         this.isValid = true;
     }
@@ -62,6 +65,8 @@ public class PacketGuiOpened implements IMessage {
         buf.writeInt(this.outputBlocks_amount);
         buf.writeInt(this.outputBlocks_index_producing);
         buf.writeBoolean(this.isPowered);
+        buf.writeBoolean(this.isWorking);
+        buf.writeBoolean(this.isDisassembling);
     }
 
     @Override
@@ -75,6 +80,8 @@ public class PacketGuiOpened implements IMessage {
             this.outputBlocks_amount = buf.readInt();
             this.outputBlocks_index_producing = buf.readInt();
             this.isPowered                    = buf.readBoolean();
+            this.isWorking                    = buf.readBoolean();
+            this.isDisassembling                    = buf.readBoolean();
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
@@ -95,21 +102,17 @@ public class PacketGuiOpened implements IMessage {
         }
 
         void processMessage(PacketGuiOpened message) {
-
-            GuiFacadingbenchContainer openGui = (GuiFacadingbenchContainer) GuiHandler.getOpenGui();
-            if (openGui == null)
-                return;
-
-            openGui.setPacketGuiOpened(
+            GuiMachineBase.setPacketGuiOpened(
                     message.itemProduceTicks,
                     message.elapsedItemProduceTicks,
                     message.itemDisassembleTicks,
                     message.elapsedItemDisassembleTicks,
                     message.outputBlocks_amount,
                     message.outputBlocks_index_producing,
-                    message.isPowered
+                    message.isPowered,
+                    message.isWorking,
+                    message.isDisassembling
             );
-
         }
     }
 

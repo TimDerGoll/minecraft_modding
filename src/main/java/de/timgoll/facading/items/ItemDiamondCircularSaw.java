@@ -33,8 +33,12 @@ public class ItemDiamondCircularSaw extends Item implements IHasModel {
     @Override
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, playerIn, tooltip, advanced);
-        String tooltip_text = new TextComponentTranslation("tooltip.diamondcircularsaw.text").getFormattedText();
+        String tooltip_text = new TextComponentTranslation("tooltip.upgrade_diamond.text").getFormattedText();
         tooltip.add(tooltip_text);
+    }
+
+    public int getMultiplier() {
+        return 25;
     }
 
 }

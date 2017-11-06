@@ -1,6 +1,7 @@
 package de.timgoll.facading.network.facadingbench;
 
-import de.timgoll.facading.client.gui.GuiFacadingbenchContainer;
+import de.timgoll.facading.client.gui.GuiMachineBase;
+import de.timgoll.facading.client.gui.GuiMachineFacadingbench;
 import de.timgoll.facading.client.gui.GuiHandler;
 import de.timgoll.facading.util.Utils;
 import io.netty.buffer.ByteBuf;
@@ -37,7 +38,6 @@ public class PackedGuiFinishedProduction implements IMessage {
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
-            return;
         }
     }
 
@@ -53,13 +53,7 @@ public class PackedGuiFinishedProduction implements IMessage {
         }
 
         void processMessage(PackedGuiFinishedProduction message) {
-
-            GuiFacadingbenchContainer openGui = (GuiFacadingbenchContainer) GuiHandler.getOpenGui();
-            if (openGui == null)
-                return;
-
-            openGui.finishedProduction(message.outputBlocks_amount);
-
+            GuiMachineBase.finishedProduction(message.outputBlocks_amount);
         }
     }
 }

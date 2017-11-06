@@ -4,10 +4,8 @@ import de.timgoll.facading.Facading;
 import de.timgoll.facading.client.IHasModel;
 import de.timgoll.facading.init.ModRegistry;
 import de.timgoll.facading.misc.EnumHandler;
-import de.timgoll.facading.titleentities.TileBlockFacadingbench;
 import de.timgoll.facading.titleentities.TileBlockMachineBase;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -33,7 +31,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -88,16 +85,15 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
         IBlockState iblockstate = world.getBlockState(pos);
         TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
 
-
+        if (te == null)
+            return;
 
         keepInventory = true; //set keepInventory to true, so that the TE stores the data without dropping inv
         world.setBlockState(pos, world.getBlockState(pos).getBlock().getDefaultState().withProperty(FACING, iblockstate.getValue((FACING))).withProperty(TYPE, te.getType()), 2);
         keepInventory = false;
 
-        if (te != null) {
-            te.validate();
-            world.setTileEntity(pos, te);
-        }
+        //te.validate();
+        //world.setTileEntity(pos, te);
     }
 
 
@@ -139,8 +135,10 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
         TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
 
+        if (te == null)
+            return;
 
-        if (te != null && te.getType() == EnumHandler.MachineStates.DEFAULT)
+        if (te.getType() == EnumHandler.MachineStates.DEFAULT)
             return;
 
         EnumFacing enumfacing = state.getValue(FACING);
@@ -151,7 +149,7 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
         double d4 = rand.nextDouble() * 0.6D - 0.3D;
 
         //play working sound
-        world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ModRegistry.SOUND_FACADINGBENCH_POWERED, SoundCategory.BLOCKS, 0.075F, 0.5F, false);
+        world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ModRegistry.SOUND_MACHINE_POWERED, SoundCategory.BLOCKS, 0.075F, 0.5F, false);
 
 
         world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1 + 1.0D, d2 + d4, 0.0D, 0.1D, 0.0D);
@@ -268,7 +266,10 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
 
-        return state.withProperty(TYPE, te.getType());
+        if (te != null)
+            return state.withProperty(TYPE, te.getType());
+        else
+            return state.withProperty(TYPE, EnumHandler.MachineStates.DEFAULT);
     }
 
     /**
@@ -311,14 +312,14 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
     @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+        System.out.println("neighborChanged at: " + pos.toString());
+
         detectWaterBlock(state.getValue(FACING).getDirectionVec(), world, pos);
 
         super.neighborChanged(state, world, pos, block, fromPos);
     }
 
     private void detectWaterBlock(Vec3i facingvector, World world, BlockPos pos) {
-        System.out.println("detect water block");
-
         if (world.isRemote) //just check on server, abort
             return;
 
@@ -331,7 +332,8 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
         TileBlockMachineBase te = (TileBlockMachineBase) world.getTileEntity(pos);
         if (te != null) {
             boolean waterSource = adjacentBlock.equals(Blocks.WATER) || adjacentBlock.equals(Blocks.FLOWING_WATER);
-            te.setWaterPowerActivated(waterSource); //true or false
+
+            te.setIsPowered(waterSource); //true or false
         }
     }
 

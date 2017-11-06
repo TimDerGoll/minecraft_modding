@@ -16,24 +16,29 @@ item.facading.watermill.name=Watermill
 item.facading.toolholder.name=Toolholder
 item.facading.framebundle.name=Framebundle
 item.facading.reinforcementbundle.name=Reinforcementbundle
-item.facading.diamondcircularsaw.name=Diamond Circularsaw
-item.facading.flintwoodcutter.name=Flint Woodcutter
-item.facading.nethersaw.name=Nethersaw
-item.facading.irontoothsaw.name=Iron Toothsaw
+
 item.facading.nail.name=Nail
 item.facading.pileofnails.name=Pile of Nails
 item.facading.boxofnails.name=Box of Nails
-item.facading.stonepress.name=Stonepress
+
+item.facading.boxer.name=Boxer
+
+item.facading.irontoothsaw.name=Iron Toothsaw
+item.facading.diamondcircularsaw.name=Diamond Circularsaw
+item.facading.nethersaw.name=Nethersaw
+
 item.facading.ironpress.name=Ironpress
 item.facading.diamondpress.name=Diamondpress
+item.facading.netherpress.name=Netherpress
 
 #Tooltips
-tooltip.itemholder.text=Needed to hold your Tools in the Facdingbench
-tooltip.watermill.text=Generats Power from flowing water
+tooltip.itemholder.text=Needed to hold your Tools in the Machines
+tooltip.watermill.text=Generates Power from flowing water
 tooltip.hammer.text=Lets you form your facades
-tooltip.flintwoodcutter.text=Tier 1
-tooltip.irontoothsaw.text=Tier 2
-tooltip.diamondcircularsaw.text=Tier 3, Enchantable
-tooltip.nethersaw.text=Tier 4, Enchantable
+tooltip.boxer.text=Produce nails way faster
+
+tooltip.upgrade_iron.text=Tier 1
+tooltip.upgrade_diamond.text=Tier 2
+tooltip.upgrade_nether.text=Tier 3, Enchantable
 
 

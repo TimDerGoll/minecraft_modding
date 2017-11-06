@@ -1,7 +1,7 @@
 package de.timgoll.facading.network.facadingbench;
 
 import de.timgoll.facading.client.gui.GuiHandler;
-import de.timgoll.facading.container.ContainerFacadingbench;
+import de.timgoll.facading.container.ContainerMachineFacadingbench;
 import de.timgoll.facading.util.Utils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -37,7 +37,6 @@ public class PacketGuiAddProductionRequest implements IMessage {
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
-            return;
         }
     }
 
@@ -54,7 +53,7 @@ public class PacketGuiAddProductionRequest implements IMessage {
 
         void processMessage(PacketGuiAddProductionRequest message) {
 
-            ContainerFacadingbench openContainer = (ContainerFacadingbench) GuiHandler.getOpenContainer();
+            ContainerMachineFacadingbench openContainer = (ContainerMachineFacadingbench) GuiHandler.getOpenContainer();
             if (openContainer == null)
                 return;
 

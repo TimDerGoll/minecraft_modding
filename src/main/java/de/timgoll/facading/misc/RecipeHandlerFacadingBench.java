@@ -7,11 +7,11 @@ import java.util.List;
 
 public class RecipeHandlerFacadingBench {
 
-    public static List<ItemStack> outputStack = new ArrayList<>();
-    public static List<List<ItemStack>> inputStacks = new ArrayList<>();
-    public static List<Integer> productionTime = new ArrayList<>();
+    public static ArrayList<ItemStack> outputStack = new ArrayList<>();
+    public static ArrayList<ArrayList<ItemStack>> inputStacks = new ArrayList<>();
+    public static ArrayList<Integer> productionTime = new ArrayList<>();
 
-    public static void addRecipe(ItemStack output, List<ItemStack> inputs, int time) {
+    public static void addRecipe(ItemStack output, ArrayList<ItemStack> inputs, int time) {
         outputStack.add(output);
         inputStacks.add(inputs);
         productionTime.add(time);

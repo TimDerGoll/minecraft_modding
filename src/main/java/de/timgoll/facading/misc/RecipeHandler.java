@@ -16,12 +16,13 @@ public class RecipeHandler {
         addToolHolder();
         addWaterMill();
 
-        addFlintWoodCutter();
         addIronToothSaw();
         addDiamondCicularSaw();
         addNetherSaw();
 
         addMachineframe();
+
+        addPress();
         addFacadingbench();
 
 
@@ -92,21 +93,6 @@ public class RecipeHandler {
             " W ",
             'W', "plankWood",
             'I', "ingotCopper"
-        );
-    }
-
-
-
-    private void addFlintWoodCutter() {
-        GameRegistry.addShapedRecipe(
-            new ResourceLocation("flintwoodcutter"),
-            new ResourceLocation("facading"),
-            new ItemStack(ModRegistry.ITEM_FLINTWOODCUTTER),
-            "WWW",
-            "FFF",
-            "   ",
-            'W', "plankWood",
-            'F', Items.FLINT
         );
     }
 
@@ -188,6 +174,22 @@ public class RecipeHandler {
         );
     }
 
+    private void addPress() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("press"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.BLOCK_PRESS),
+                "P P",
+                "#RT",
+                "SSS",
+                'P', Blocks.PISTON,
+                '#', ModRegistry.ITEM_WATERMILL,
+                'T', ModRegistry.ITEM_TOOLHOLDER,
+                'R', "dustRedstone",
+                'S', "stone"
+        );
+    }
+
     private void addFacadingbench() {
         GameRegistry.addShapedRecipe(
             new ResourceLocation("facadingbench"),
@@ -221,7 +223,7 @@ public class RecipeHandler {
                 new ItemStack(ModRegistry.BLOCK_FACADE, 8),
                 new ArrayList<ItemStack>() {
                     {
-                        add(new ItemStack(ModRegistry.ITEM_NAIL, 64));
+                        add(new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1));
                         add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
                     }
                 },
@@ -234,7 +236,7 @@ public class RecipeHandler {
                 new ItemStack(Blocks.BOOKSHELF, 8),
                 new ArrayList<ItemStack>() {
                     {
-                        add(new ItemStack(ModRegistry.ITEM_NAIL, 64));
+                        add(new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1));
                         add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
                     }
                 },
@@ -247,7 +249,7 @@ public class RecipeHandler {
                 new ItemStack(Blocks.STONE, 8),
                 new ArrayList<ItemStack>() {
                     {
-                        add(new ItemStack(ModRegistry.ITEM_NAIL, 64));
+                        add(new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1));
                         add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
                     }
                 },

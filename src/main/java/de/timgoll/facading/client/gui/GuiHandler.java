@@ -1,14 +1,12 @@
 package de.timgoll.facading.client.gui;
 
-import de.timgoll.facading.container.ContainerFacadingbench;
-import de.timgoll.facading.titleentities.TileBlockFacadingbench;
+import de.timgoll.facading.container.ContainerMachineFacadingbench;
+import de.timgoll.facading.titleentities.TileBlockMachineFacadingbench;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -26,7 +24,7 @@ public class GuiHandler implements IGuiHandler {
 
         switch (ID) {
             case GUI_FACADING_CONTAINER_ID:
-                OPENCONTAINER = new ContainerFacadingbench(player.inventory, (TileBlockFacadingbench) te);
+                OPENCONTAINER = new ContainerMachineFacadingbench(player.inventory, (TileBlockMachineFacadingbench) te);
                 return OPENCONTAINER;
             default: return null;
         }
@@ -39,7 +37,7 @@ public class GuiHandler implements IGuiHandler {
 
         switch (ID) {
             case GUI_FACADING_CONTAINER_ID:
-                OPENGUI = new GuiFacadingbenchContainer(player.inventory, (TileBlockFacadingbench) te);
+                OPENGUI = new GuiMachineFacadingbench(player.inventory, (TileBlockMachineFacadingbench) te);
                 return OPENGUI;
             default: return null;
         }

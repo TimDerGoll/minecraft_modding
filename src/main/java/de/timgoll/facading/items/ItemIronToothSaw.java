@@ -33,8 +33,12 @@ public class ItemIronToothSaw extends Item implements IHasModel {
     @Override
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, playerIn, tooltip, advanced);
-        String tooltip_text = new TextComponentTranslation("tooltip.irontoothsaw.text").getFormattedText();
+        String tooltip_text = new TextComponentTranslation("tooltip.upgrade_iron.text").getFormattedText();
         tooltip.add(tooltip_text);
+    }
+
+    public int getMultiplier() {
+        return 10;
     }
 
 }
