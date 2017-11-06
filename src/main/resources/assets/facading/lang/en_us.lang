@@ -11,6 +11,12 @@ tile.facading.flatlamp.name=Flatlamp
 tile.facading.industriallamp.name=Industriallamp
 
 #Items
+item.facading.demerald_pickaxe.name=Demerald Pickaxe
+item.facading.demerald_axe.name=Demerald Axe
+item.facading.demerald_shovel.name=Demerald Shovel
+item.facading.demerald_hoe.name=Demerald Hoe
+item.facading.demerald_sword.name=Demerald Sword
+
 item.facading.hammer.name=Facading Hammer
 item.facading.watermill.name=Watermill
 item.facading.toolholder.name=Toolholder
@@ -40,5 +46,10 @@ tooltip.boxer.text=Produce nails way faster
 tooltip.upgrade_iron.text=Tier 1
 tooltip.upgrade_diamond.text=Tier 2
 tooltip.upgrade_nether.text=Tier 3, Enchantable
+
+machine.status.power.true=Machine is Powered
+machine.status.power.false=No Watersource Detected
+machine.button.add=Add new Production
+machine.button.cancel=Stop Producing
 
 

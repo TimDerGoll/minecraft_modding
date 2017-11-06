@@ -14,6 +14,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.Sys;
@@ -85,7 +86,17 @@ public class GuiMachineBase extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         fontRenderer.drawString("x" + outputBlocks_amount, 64, 28, Color.darkGray.getRGB());
 
-        drawSpecialTooltips(mouseX, mouseY);
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add( new TextComponentTranslation("machine.status.power." + isPowered).getFormattedText() );
+        drawSpecialTooltips(lines, mouseX, mouseY, guiLeft + 56, guiTop + 59, 10, 10);
+
+        lines.clear();
+        lines.add( new TextComponentTranslation("machine.button.add").getFormattedText() );
+        drawSpecialTooltips(lines, mouseX, mouseY, guiLeft + 17, guiTop + 56, 16, 16);
+
+        lines.clear();
+        lines.add( new TextComponentTranslation("machine.button.cancel").getFormattedText() );
+        drawSpecialTooltips(lines, mouseX, mouseY, guiLeft + 35, guiTop + 56, 16, 16);
 
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
     }
@@ -210,8 +221,8 @@ public class GuiMachineBase extends GuiContainer {
 
     private void drawSpecialTooltips(ArrayList<String> lines, int mouseX, int mouseY, int posX, int posY, int width, int height) {
         //powertooltip
-        if (mouseX >= guiLeft + 56 && mouseX <= guiLeft + 56 + 10) {
-            if (mouseY >= guiTop + 59 && mouseY <= guiTop + 59 + 10) {
+        if (mouseX >= posX && mouseX <= posX + width) {
+            if (mouseY >= posY && mouseY <= posY + width) {
                 drawHoveringText(lines, mouseX - guiLeft, mouseY - guiTop);
             }
         }

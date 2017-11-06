@@ -1,8 +1,8 @@
 {
-  "facadingbench_powered": {
+  "machine_powered": {
     "category": "block",
     "sounds": [
-      "facading:facadingbench_powered"
+      "facading:machine_powered"
     ]
   }
 }
