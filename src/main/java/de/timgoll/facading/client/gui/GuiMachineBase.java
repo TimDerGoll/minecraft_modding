@@ -20,6 +20,7 @@ import org.lwjgl.Sys;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GuiMachineBase extends GuiContainer {
 
@@ -83,6 +84,8 @@ public class GuiMachineBase extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         fontRenderer.drawString("x" + outputBlocks_amount, 64, 28, Color.darkGray.getRGB());
+
+        drawSpecialTooltips(mouseX, mouseY);
 
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
     }
@@ -203,6 +206,15 @@ public class GuiMachineBase extends GuiContainer {
             return 0;
 
         return (int) (height * ((float) elapsedItemDisassembleTicks / (float) itemDisassembleTicks));
+    }
+
+    private void drawSpecialTooltips(ArrayList<String> lines, int mouseX, int mouseY, int posX, int posY, int width, int height) {
+        //powertooltip
+        if (mouseX >= guiLeft + 56 && mouseX <= guiLeft + 56 + 10) {
+            if (mouseY >= guiTop + 59 && mouseY <= guiTop + 59 + 10) {
+                drawHoveringText(lines, mouseX - guiLeft, mouseY - guiTop);
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
