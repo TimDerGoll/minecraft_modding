@@ -17,3 +17,5 @@
 - Factory decorative Blocks
 - Better Tools build with emerald+diamond + special Stuff
 - Stone to stairs tool, enable/disable with keybind
+- Throughwalkable Block (camuflage), which is basicly the same as the normal Block, just with a new state
+
