@@ -5,7 +5,6 @@ import de.timgoll.facading.client.IHasModel;
 import de.timgoll.facading.init.ModRegistry;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -14,7 +13,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemNetherSaw extends Item implements IHasModel {
+public class ItemNetherSaw extends ItemUpgradeBase implements IHasModel {
 
     public ItemNetherSaw(String name) {
         this.setRegistryName(name);
@@ -37,8 +36,8 @@ public class ItemNetherSaw extends Item implements IHasModel {
         tooltip.add(tooltip_text);
     }
 
+    @Override
     public int getMultiplier() {
         return 35;
     }
-
 }

@@ -2,6 +2,7 @@ package de.timgoll.facading.container;
 
 import de.timgoll.facading.container.slots.SlotFacadingbench;
 import de.timgoll.facading.init.ModRegistry;
+import de.timgoll.facading.misc.CustomRecipeRegistry;
 import de.timgoll.facading.misc.RecipeHandlerPress;
 import de.timgoll.facading.network.PacketHandler;
 import de.timgoll.facading.network.packets.PacketGuiOpened;
@@ -12,6 +13,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSaddle;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -67,7 +70,11 @@ public class ContainerMachinePress extends ContainerMachineBase {
     private List<Item> getAllowedItemsInput() {
         List<Item> allowedItems = new ArrayList<>();
 
-        allowedItems.add(Items.IRON_INGOT);
+        for (ArrayList<ArrayList<ItemStack>> inputStackList : CustomRecipeRegistry.getInputList("press")) {
+            System.out.println(inputStackList);
+            for (ItemStack inputStack : inputStackList.get(0))
+                allowedItems.add(inputStack.getItem() );
+        }
 
         return allowedItems;
     }

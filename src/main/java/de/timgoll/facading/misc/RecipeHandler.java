@@ -4,8 +4,12 @@ import de.timgoll.facading.init.ModRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.IngredientNBT;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.ArrayList;
 
@@ -22,6 +26,8 @@ public class RecipeHandler {
 
         addMachineframe();
 
+        addUncompressedDemerald();
+
         addPress();
         addFacadingbench();
 
@@ -30,6 +36,13 @@ public class RecipeHandler {
         addFacade();
         addPlaceholder();
         addPlaceholder2();
+
+        addReinforcementBundle();
+        addEmeraldPlate();
+        addDiamondPlate();
+        addDemerald();
+
+        OreDictionary.getOres("iron");
     }
 
     /* ** RECIPES ** */
@@ -192,7 +205,7 @@ public class RecipeHandler {
 
     private void addFacadingbench() {
         GameRegistry.addShapedRecipe(
-            new ResourceLocation("packets"),
+            new ResourceLocation("facadingbench"),
             new ResourceLocation("facading"),
             new ItemStack(ModRegistry.BLOCK_FACADINGBENCH),
             "WCW",
@@ -207,6 +220,19 @@ public class RecipeHandler {
         );
     }
 
+    private void addUncompressedDemerald() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("uncompressed_demerald"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.ITEM_UNCOMPRESSED_DEMERALD),
+                " E ",
+                " S ",
+                " D ",
+                'E', ModRegistry.ITEM_EMERALD_PLATE,
+                'S', "slimeball",
+                'D', ModRegistry.ITEM_DIAMOND_PLATE
+        );
+    }
 
 
 
@@ -219,54 +245,76 @@ public class RecipeHandler {
 
     // CUSTOM CRAFTING METHODS
     private void addFacade() {
-        RecipeHandlerFacadingBench.addRecipe(
+        CustomRecipeRegistry.addMachineRecipe(
+                "facadingbench",
                 new ItemStack(ModRegistry.BLOCK_FACADE, 8),
-                new ArrayList<ItemStack>() {
-                    {
-                        add(new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1));
-                        add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
-                    }
-                },
-                100
+                2000,
+                new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1),
+                new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8)
         );
     }
 
     private void addPlaceholder() {
-        RecipeHandlerFacadingBench.addRecipe(
-                new ItemStack(Blocks.BOOKSHELF, 8),
-                new ArrayList<ItemStack>() {
-                    {
-                        add(new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1));
-                        add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
-                    }
-                },
-                1000
+        CustomRecipeRegistry.addMachineRecipe(
+                "facadingbench",
+                new ItemStack(Blocks.BOOKSHELF, 16),
+                10000,
+                new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1),
+                new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8)
         );
     }
 
     private void addPlaceholder2() {
-        RecipeHandlerFacadingBench.addRecipe(
-                new ItemStack(Blocks.STONE, 8),
-                new ArrayList<ItemStack>() {
-                    {
-                        add(new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1));
-                        add(new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8));
-                    }
-                },
-                10
+        CustomRecipeRegistry.addMachineRecipe(
+                "facadingbench",
+                new ItemStack(Blocks.BONE_BLOCK, 4),
+                5000,
+                new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 1),
+                new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8)
         );
     }
 
 
     private void addReinforcementBundle() {
-        RecipeHandlerPress.addRecipe(
-                new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 4),
-                new ArrayList<ItemStack>() {
-                    {
-                        add(new ItemStack(Items.IRON_INGOT, 1));
-                    }
-                },
-                100
+        CustomRecipeRegistry.addMachineRecipe(
+                "press",
+                new ItemStack(ModRegistry.ITEM_REINFORCEMENTBUNDLE, 4),
+                5000,
+                "ingotIron"
+        );
+
+        CustomRecipeRegistry.addMachineRecipe(
+                "press",
+                new ItemStack(ModRegistry.ITEM_REINFORCEMENTBUNDLE, 4),
+                5000,
+                "ingotCopper"
+        );
+    }
+
+    private void addEmeraldPlate() {
+        CustomRecipeRegistry.addMachineRecipe(
+                "press",
+                new ItemStack(ModRegistry.ITEM_EMERALD_PLATE, 1),
+                2500,
+                "gemEmerald"
+        );
+    }
+
+    private void addDiamondPlate() {
+        CustomRecipeRegistry.addMachineRecipe(
+                "press",
+                new ItemStack(ModRegistry.ITEM_DIAMOND_PLATE, 1),
+                2500,
+                "gemDiamond"
+        );
+    }
+
+    private void addDemerald() {
+        CustomRecipeRegistry.addMachineRecipe(
+                "press",
+                new ItemStack(ModRegistry.ITEM_DEMERALD, 1),
+                2500,
+                new ItemStack(ModRegistry.ITEM_UNCOMPRESSED_DEMERALD)
         );
     }
 }

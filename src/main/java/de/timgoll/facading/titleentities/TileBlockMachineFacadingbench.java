@@ -1,16 +1,21 @@
 package de.timgoll.facading.titleentities;
 
+import de.timgoll.facading.misc.CustomRecipeRegistry;
 import de.timgoll.facading.misc.RecipeHandlerFacadingBench;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileBlockMachineFacadingbench extends TileBlockMachineBase {
 
     public TileBlockMachineFacadingbench() {
+        super("facadingbench");
+
         inventory = new ItemStackHandler(15);
 
-        outputStack    = RecipeHandlerFacadingBench.outputStack;
-        inputStacks    = RecipeHandlerFacadingBench.inputStacks;
-        productionTime = RecipeHandlerFacadingBench.productionTime;
+        recipeList = CustomRecipeRegistry.getRecipeList("facadingbench");
+
+        //outputStack    = RecipeHandlerFacadingBench.outputStack;
+        //inputStacks    = RecipeHandlerFacadingBench.inputStacks;
+        //productionTime = RecipeHandlerFacadingBench.productionTime;
 
         //configuring TE
         hasProduction  = true;
@@ -28,6 +33,8 @@ public class TileBlockMachineFacadingbench extends TileBlockMachineBase {
         inputSlots.add(8);
 
         disassembleSlots.add(9);
+
+        upgradeSlot.add(10);
 
         outputSlots.add(11);
         outputSlots.add(12);

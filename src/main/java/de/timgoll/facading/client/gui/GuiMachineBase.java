@@ -28,10 +28,16 @@ public class GuiMachineBase extends GuiContainer {
     final int CANCELPRODUCTION = 3;
     ButtonMachinePreview previewPrev, previewNext;
     ButtonMachineSquare addProduction, cancelProduction;
+
     int powerIndicatorLeft;
     int powerIndicatorTop;
     int powerIndicatorTextureLeft;
     int powerIndicatorTextureTop;
+
+    int progressBarLeft;
+    int progressBarTop;
+    int progressBarTextureLeft;
+    int progressBarTextureTop;
 
     static int itemProductionTicks;
     static double elapsedItemProductionTicks;
@@ -177,7 +183,7 @@ public class GuiMachineBase extends GuiContainer {
 
         //progress of production
         if (elapsedItemProductionTicks > 0)
-            drawTexturedModalRect(guiLeft + 67, guiTop + 30, 176, 30, getProductionProgressPixels(24), 17);
+            drawTexturedModalRect(guiLeft + progressBarLeft, guiTop + progressBarTop, progressBarTextureLeft, progressBarTextureTop, getProductionProgressPixels(24), 17);
 
         //progress of disassembly
         if (elapsedItemDisassembleTicks > 0)
@@ -189,9 +195,6 @@ public class GuiMachineBase extends GuiContainer {
      */
     private int getProductionProgressPixels(int width) {
         if (itemProductionTicks == 0)
-            return 0;
-
-        if (outputBlocks_amount == 0)
             return 0;
 
         return (int) (width * ((float) elapsedItemProductionTicks / (float) itemProductionTicks));

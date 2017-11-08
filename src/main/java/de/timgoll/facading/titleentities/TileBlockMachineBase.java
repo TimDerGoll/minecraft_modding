@@ -1,6 +1,8 @@
 package de.timgoll.facading.titleentities;
 
 import de.timgoll.facading.blocks.BlockMachineBase;
+import de.timgoll.facading.items.ItemUpgradeBase;
+import de.timgoll.facading.misc.CustomRecipeRegistry;
 import de.timgoll.facading.misc.EnumHandler;
 import de.timgoll.facading.network.PacketHandler;
 import de.timgoll.facading.network.packets.PackedGuiFinishedProduction;
@@ -8,6 +10,7 @@ import de.timgoll.facading.network.packets.PacketGuiIsPowered;
 import de.timgoll.facading.network.packets.PacketGuiStartedDisassembly;
 import de.timgoll.facading.network.packets.PacketGuiStartedProduction;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -36,8 +39,9 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
     boolean isDisassembling         = false;
     int outputBlocks_indexProducing = 0;
     int outputBlocks_amount         = 0;
-    int elapsedTicksProducing = 0;
-    int elapsedTicksDisassembling = 0;
+    int elapsedTicksProducing       = 0;
+    int elapsedTicksDisassembling   = 0;
+    int tickMultiplier              = 0;
     //NBT data end
 
 
@@ -46,15 +50,24 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
     ArrayList<Integer> outputSlots      = new ArrayList<>();
     ArrayList<Integer> inputSlots       = new ArrayList<>();
     ArrayList<Integer> disassembleSlots = new ArrayList<>();
+    ArrayList<Integer> upgradeSlot      = new ArrayList<>();
 
     //cache the recipes for every type
-    ArrayList<ItemStack> outputStack                = new ArrayList<>();
-    ArrayList<ArrayList<ItemStack>> inputStacks     = new ArrayList<>();
-    public static ArrayList<Integer> productionTime = new ArrayList<>();
+    ArrayList<ItemStack> outputStack                       = new ArrayList<>();
+    ArrayList<ArrayList<ArrayList<ItemStack>>> inputStacks = new ArrayList<>();
+    ArrayList<Integer> productionTime                      = new ArrayList<>();
+
+    ArrayList<CustomRecipeRegistry.MachineRecipe> recipeList = new ArrayList<>();
 
     private int disassembleId = 0;
     boolean hasProduction = false;
     boolean hasDisassembly = false;
+
+    TileBlockMachineBase(String machinetype) {
+        outputStack    = CustomRecipeRegistry.getOutputList(machinetype);
+        inputStacks    = CustomRecipeRegistry.getInputList(machinetype);
+        productionTime = CustomRecipeRegistry.getProductionTimeList(machinetype);
+    }
 
 
     public void setIsPowered(boolean powered) {
@@ -163,20 +176,25 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
         //PRODUCTION CODE
         if (hasProduction && ( isProducing || checkMachineStateForProduction() ) ) {
             if (elapsedTicksProducing == 0) { //new production started
+                //get production speed multiplier
+                tickMultiplier = 1;
+                if ( !inventory.getStackInSlot( upgradeSlot.get(0) ).isEmpty() )
+                    tickMultiplier = ( (ItemUpgradeBase) inventory.getStackInSlot( upgradeSlot.get(0) ).getItem() ).getMultiplier();
+
                 isProducing = true;
                 extractNeededInput(
                         inputStacks.get(outputBlocks_indexProducing),
                         inputSlots
                 );
                 sendStartedProductionMessage(
-                        productionTime.get(outputBlocks_indexProducing)
+                        productionTime.get(outputBlocks_indexProducing) / tickMultiplier
                 );
                 BlockMachineBase.setState(this.world, this.pos);
             }
 
             elapsedTicksProducing++;
 
-            if (elapsedTicksProducing >= productionTime.get(outputBlocks_indexProducing)) { //production finished
+            if ( elapsedTicksProducing >= productionTime.get(outputBlocks_indexProducing)  / tickMultiplier ) { //production finished
 
                 insertOutput_single(
                         outputStack.get(outputBlocks_indexProducing),
@@ -186,7 +204,6 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
                 isProducing = false;
                 elapsedTicksProducing = 0;
                 outputBlocks_amount--;
-
                 sendFinishedProductionMessage();
                 BlockMachineBase.setState(this.world, this.pos);
             }
@@ -197,8 +214,11 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
             if (elapsedTicksDisassembling == 0) {
                 isDisassembling = true;
 
+                ArrayList<ItemStack> tmpInput = new ArrayList<>();
+                tmpInput.add(outputStack.get(disassembleId));
+
                 extractNeededInput_single(
-                        outputStack.get(disassembleId),
+                        tmpInput,
                         disassembleSlots
                 );
 
@@ -212,7 +232,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
             if (elapsedTicksDisassembling >= disassembleTicks) {
                 insertOutput(
-                        inputStacks.get(disassembleId),
+                        inputStacks.get(disassembleId).get(0),
                         inputSlots
                 );
 
@@ -249,6 +269,9 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
      */
     private boolean checkMachineStateForProduction() {
         if (outputBlocks_amount <= 0)
+            return false;
+
+        if (inputStacks.size() == 0)
             return false;
 
         boolean inputIsAvailable = inputIsAvailable(
@@ -298,7 +321,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
         //check if output can be inserted
         boolean outputCanBeInserted = outputCanBeInserted(
-                inputStacks.get(outputBlocks_indexProducing),
+                inputStacks.get(outputBlocks_indexProducing).get(0),
                 inputSlots
         );
 
@@ -314,14 +337,14 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
      * @param slots an ArrayList with the slots in the ContainerInventory
      * @return the state
      */
-    private boolean inputIsAvailable(ArrayList<ItemStack> inputStacks, ArrayList<Integer> slots) {
-        for (ItemStack inputStack : inputStacks) {
+    private boolean inputIsAvailable(ArrayList<ArrayList<ItemStack>> inputStacks, ArrayList<Integer> slots) {
+        for (ArrayList<ItemStack> inputStack : inputStacks) {
             int amount = 0;
             int i;
             for (i = 0; i < slots.size(); i++) {
-                if ( inventory.getStackInSlot(slots.get(i)).getItem().equals(inputStack.getItem()) ) {
+                if ( isInStackList(inputStack, inventory.getStackInSlot(slots.get(i)).getItem()) ) {
                     amount += inventory.getStackInSlot(slots.get(i)).getCount();
-                    if (amount >= inputStack.getCount())
+                    if (amount >= inputStack.get(0).getCount()) //compare to first entry, others are just alternative ones
                         break;
                 }
             }
@@ -337,11 +360,11 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
      * @param inputStacks an ArrayList of the Items to extract
      * @param slots an ArrayList with the slots in the ContainerInventory
      */
-    private void extractNeededInput(ArrayList<ItemStack> inputStacks, ArrayList<Integer> slots) {
-        for (ItemStack inputStack : inputStacks) {
-            int remaining = inputStack.getCount();
+    private void extractNeededInput(ArrayList<ArrayList<ItemStack>> inputStacks, ArrayList<Integer> slots) {
+        for (ArrayList<ItemStack> inputStack : inputStacks) {
+            int remaining = inputStack.get(0).getCount();
             for (int slot : slots) {
-                if ( inventory.getStackInSlot(slot).getItem().equals(inputStack.getItem()) ) {
+                if ( isInStackList(inputStack, inventory.getStackInSlot(slots.get(slot)).getItem()) ) {
                     int amountInSlot = inventory.getStackInSlot(slot).getCount();
                     inventory.extractItem(slot, remaining, false);
                     remaining -= amountInSlot;
@@ -353,11 +376,11 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
         }
     }
 
-    private void extractNeededInput_single(ItemStack inputStacks, ArrayList<Integer> slots) {
-        ArrayList<ItemStack> outputStacks = new ArrayList<>();
-        outputStacks.add(inputStacks);
+    private void extractNeededInput_single(ArrayList<ItemStack> inputStack, ArrayList<Integer> slots) {
+        ArrayList<ArrayList<ItemStack>> inputStacks = new ArrayList<>();
+        inputStacks.add(inputStack);
 
-        extractNeededInput(outputStacks, slots);
+        extractNeededInput(inputStacks, slots);
     }
 
     /**
@@ -430,6 +453,14 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
         insertOutput(outputStacks, slots);
     }
 
+    boolean isInStackList(ArrayList<ItemStack> stackList, Item item) {
+        for (ItemStack stack : stackList) {
+            if (stack.getItem().equals(item))
+                return true;
+        }
+        return false;
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////
     /// NETWORKING STUFF                                                             ///
@@ -438,7 +469,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
     public void cancelProduction() { //TODO: call on Blockbreak
         if (isProducing) {
             insertOutput(
-                    inputStacks.get(outputBlocks_indexProducing),
+                    inputStacks.get(outputBlocks_indexProducing).get(0),
                     inputSlots
             );
         }
@@ -519,6 +550,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
         this.outputBlocks_amount         = compound.getInteger("outputBlocks_amount");
         this.elapsedTicksProducing       = compound.getInteger("elapsedTicksProducing");
         this.elapsedTicksDisassembling   = compound.getInteger("elapsedTicksDisassembling");
+        this.tickMultiplier              = compound.getInteger("tickMultiplier");
     }
 
     @Override
@@ -532,6 +564,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
         compound.setInteger("outputBlocks_amount", outputBlocks_amount);
         compound.setInteger("elapsedTicksProducing", elapsedTicksProducing);
         compound.setInteger("elapsedTicksDisassembling", elapsedTicksDisassembling);
+        compound.setInteger("tickMultiplier", tickMultiplier);
 
         return super.writeToNBT(compound);
     }

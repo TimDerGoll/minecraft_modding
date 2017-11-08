@@ -4,6 +4,7 @@ import de.timgoll.facading.Facading;
 import de.timgoll.facading.client.gui.buttons.ButtonMachinePreview;
 import de.timgoll.facading.client.gui.buttons.ButtonMachineSquare;
 import de.timgoll.facading.container.ContainerMachineFacadingbench;
+import de.timgoll.facading.misc.CustomRecipeRegistry;
 import de.timgoll.facading.misc.RecipeHandlerFacadingBench;
 import de.timgoll.facading.titleentities.TileBlockMachineFacadingbench;
 import net.minecraft.client.renderer.GlStateManager;
@@ -24,18 +25,24 @@ public class GuiMachineFacadingbench extends GuiMachineBase {
         ySize = 193;
 
         texture = new ResourceLocation(Facading.MODID, "textures/gui/machinefacadingbench.png");
+
         powerIndicatorLeft = 56;
         powerIndicatorTop = 59;
         powerIndicatorTextureLeft = 195;
         powerIndicatorTextureTop = 59;
 
+        progressBarLeft = 67;
+        progressBarTop = 30;
+        progressBarTextureLeft = 176;
+        progressBarTextureTop = 30;
+
         //set up limits for navigationarea
-        outputBlocks_upperLimit = RecipeHandlerFacadingBench.size();
+        outputBlocks_upperLimit = CustomRecipeRegistry.getRecipeList("facadingbench").size();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        fontRenderer.drawString(new TextComponentTranslation("tile.facading.packets.name").getFormattedText(), 8, 6, Color.darkGray.getRGB());
+        fontRenderer.drawString(new TextComponentTranslation("tile.facading.facadingbench.name").getFormattedText(), 8, 6, Color.darkGray.getRGB());
         fontRenderer.drawString(new TextComponentTranslation("container.inventory").getFormattedText(), 8, 100, Color.darkGray.getRGB()); //vanilla name
 
         fontRenderer.drawString("x" + outputBlocks_amount, 64, 28, Color.darkGray.getRGB());
@@ -66,10 +73,10 @@ public class GuiMachineFacadingbench extends GuiMachineBase {
             GlStateManager.scale(2, 2, 2);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             RenderHelper.enableGUIStandardItemLighting();
-            mc.getRenderItem().renderItemIntoGUI(RecipeHandlerFacadingBench.outputStack.get(outputBlocks_index), 0, 0);
+            mc.getRenderItem().renderItemIntoGUI(CustomRecipeRegistry.getOutputList("facadingbench").get(outputBlocks_index), 0, 0);
         }
         GlStateManager.popMatrix();
-        mc.getRenderItem().renderItemOverlays(fontRenderer, RecipeHandlerFacadingBench.outputStack.get(outputBlocks_index), guiLeft + 34, guiTop + 36);
+        mc.getRenderItem().renderItemOverlays(fontRenderer, CustomRecipeRegistry.getOutputList("facadingbench").get(outputBlocks_index), guiLeft + 34, guiTop + 36);
     }
 
     @Override

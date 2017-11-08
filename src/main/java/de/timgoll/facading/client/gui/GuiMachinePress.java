@@ -17,10 +17,16 @@ public class GuiMachinePress extends GuiMachineBase {
         ySize = 155;
 
         texture = new ResourceLocation(Facading.MODID, "textures/gui/machinebase.png");
+
         powerIndicatorLeft = 20;
         powerIndicatorTop = 31;
         powerIndicatorTextureLeft = 200;
         powerIndicatorTextureTop = 31;
+
+        progressBarLeft = 67;
+        progressBarTop = 28;
+        progressBarTextureLeft = 176;
+        progressBarTextureTop = 28;
     }
 
     @Override

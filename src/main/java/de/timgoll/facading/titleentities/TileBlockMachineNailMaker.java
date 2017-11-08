@@ -6,13 +6,13 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileBlockMachineNailMaker extends TileBlockMachineGeneric {
 
     public TileBlockMachineNailMaker() {
-        super();
+        super("press");
 
         inventory = new ItemStackHandler(6);
 
-        outputStack    = RecipeHandlerFacadingBench.outputStack;
-        inputStacks    = RecipeHandlerFacadingBench.inputStacks;
-        productionTime = RecipeHandlerFacadingBench.productionTime;
+        //outputStack    = RecipeHandlerFacadingBench.outputStack;
+        //inputStacks    = RecipeHandlerFacadingBench.inputStacks;
+        //productionTime = RecipeHandlerFacadingBench.productionTime;
     }
 
 }

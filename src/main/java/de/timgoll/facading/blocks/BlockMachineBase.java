@@ -312,8 +312,6 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
     @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
-        System.out.println("neighborChanged at: " + pos.toString());
-
         detectWaterBlock(state.getValue(FACING).getDirectionVec(), world, pos);
 
         super.neighborChanged(state, world, pos, block, fromPos);

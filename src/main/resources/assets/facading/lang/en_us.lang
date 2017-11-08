@@ -11,6 +11,11 @@ tile.facading.flatlamp.name=Flatlamp
 tile.facading.industriallamp.name=Industriallamp
 
 #Items
+item.facading.emerald_plate.name=Emerald Plate
+item.facading.diamond_plate.name=Diamond Plate
+item.facading.uncompressed_demerald.name=Uncompressed Demerald
+item.facading.demerald.name=Demerald
+
 item.facading.demerald_pickaxe.name=Demerald Pickaxe
 item.facading.demerald_axe.name=Demerald Axe
 item.facading.demerald_shovel.name=Demerald Shovel
