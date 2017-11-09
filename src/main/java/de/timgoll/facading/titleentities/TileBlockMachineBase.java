@@ -123,7 +123,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
         if (outputStack.size() == 0)
             return 0;
 
-        return productionTime.get( outputBlocks_indexProducing );
+        return productionTime.get( outputBlocks_indexProducing ) / tickMultiplier;
     }
 
     public int getElapsedTicksProducing() {
