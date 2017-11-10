@@ -123,6 +123,9 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
         if (outputStack.size() == 0)
             return 0;
 
+        if (tickMultiplier == 0)
+            return productionTime.get( outputBlocks_indexProducing );
+
         return productionTime.get( outputBlocks_indexProducing ) / tickMultiplier;
     }
 
@@ -231,8 +234,13 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
             elapsedTicksDisassembling++;
 
             if (elapsedTicksDisassembling >= disassembleTicks) {
+                //change the storage format from input (multiple item variants) to output (just one item variant)
+                ArrayList<ItemStack> tmpStackList = new ArrayList<>();
+                for ( ArrayList<ItemStack> output : inputStacks.get(disassembleId) )
+                    tmpStackList.add(output.get(0));
+
                 insertOutput(
-                        inputStacks.get(disassembleId).get(0),
+                        tmpStackList,
                         inputSlots
                 );
 
@@ -320,8 +328,12 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
             return false;
 
         //check if output can be inserted
+        //change the storage format from input (multiple item variants) to output (just one item variant)
+        ArrayList<ItemStack> tmpStackList = new ArrayList<>();
+        for ( ArrayList<ItemStack> output : inputStacks.get(disassembleId) )
+            tmpStackList.add(output.get(0));
         boolean outputCanBeInserted = outputCanBeInserted(
-                inputStacks.get(outputBlocks_indexProducing).get(0),
+                tmpStackList,
                 inputSlots
         );
 
@@ -364,7 +376,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
         for (ArrayList<ItemStack> inputStack : inputStacks) {
             int remaining = inputStack.get(0).getCount();
             for (int slot : slots) {
-                if ( isInStackList(inputStack, inventory.getStackInSlot(slots.get(slot)).getItem()) ) {
+                if ( isInStackList(inputStack, inventory.getStackInSlot(slot).getItem()) ) {
                     int amountInSlot = inventory.getStackInSlot(slot).getCount();
                     inventory.extractItem(slot, remaining, false);
                     remaining -= amountInSlot;
@@ -390,6 +402,7 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
      * @return the state
      */
     private boolean outputCanBeInserted(ArrayList<ItemStack> outputStacks, ArrayList<Integer> slots) {
+        System.out.println("outputStacks: " + outputStacks);
         for (ItemStack outputStack : outputStacks) {
             int freeslots = 0;
             int i;
@@ -468,14 +481,20 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
     public void cancelProduction() { //TODO: call on Blockbreak
         if (isProducing) {
+            //change the storage format from input (multiple item variants) to output (just one item variant)
+            ArrayList<ItemStack> tmpStackList = new ArrayList<>();
+            for ( ArrayList<ItemStack> output : inputStacks.get(outputBlocks_indexProducing) )
+                tmpStackList.add(output.get(0));
+
             insertOutput(
-                    inputStacks.get(outputBlocks_indexProducing).get(0),
+                    tmpStackList,
                     inputSlots
             );
+            isProducing           = false;
+            outputBlocks_amount   = 0;
+            elapsedTicksProducing = 0;
+            sendFinishedProductionMessage();
         }
-        isProducing           = false;
-        outputBlocks_amount   = 0;
-        elapsedTicksProducing = 0;
     }
 
 

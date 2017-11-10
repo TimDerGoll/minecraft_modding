@@ -291,6 +291,8 @@ public class GuiMachineBase extends GuiContainer {
      */
     public static void finishedProduction(int _outputBlocks_amount) {
         outputBlocks_amount        = _outputBlocks_amount;
+        elapsedItemProductionTicks = 0; //not needed, but for convenience
+        isProducing = false;
     }
 
     /**
