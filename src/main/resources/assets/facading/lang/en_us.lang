@@ -2,10 +2,13 @@
 itemGroup.facading=Facading
 
 #Blocks
-tile.facading.facade.name=Facade
 tile.facading.machineframe.name=Machineframe
 tile.facading.facadingbench.name=Facadingbench
 tile.facading.press.name=Press
+tile.facading.nailmaker.name=Nail Maker
+tile.facading.sawmill.name=Sawmill
+
+tile.facading.facade.name=Facade
 
 tile.facading.flatlamp.name=Flatlamp
 tile.facading.industriallamp.name=Industriallamp
@@ -43,8 +46,6 @@ item.facading.diamondpress.name=Diamondpress
 item.facading.netherpress.name=Netherpress
 
 #Tooltips
-tooltip.itemholder.text=Needed to hold your Tools in the Machines
-tooltip.watermill.text=Generates Power from flowing water
 tooltip.hammer.text=Lets you form your facades
 tooltip.boxer.text=Produce nails way faster
 

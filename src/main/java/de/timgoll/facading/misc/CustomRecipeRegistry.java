@@ -1,5 +1,6 @@
 package de.timgoll.facading.misc;
 
+import de.timgoll.facading.util.Utils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
@@ -37,12 +38,9 @@ public class CustomRecipeRegistry {
                 inputList.add((ArrayList) params[i]);
             }
         }
-        System.out.println(inputList);
 
         if (inputList.size() == 0 || inputList.get(0).size() == 0)
             return;
-
-        System.out.println("added");
 
         addToArrayList(
                 recipes,
@@ -62,17 +60,26 @@ public class CustomRecipeRegistry {
     public static ArrayList<ItemStack> getOutputList(String machinetype) {
         ArrayList<ItemStack> outputList = new ArrayList<>();
 
-        for (MachineRecipe recipe : getRecipeList(machinetype))
-            outputList.add(recipe.getOutputStack());
+        try {
+            for (MachineRecipe recipe : getRecipeList(machinetype))
+                outputList.add(recipe.getOutputStack());
+        } catch (NullPointerException npe) {
+            Utils.getLogger().debug("Tried to read a recipe for an undefined machine");
+            Utils.getLogger().catching(npe);
+        }
 
         return outputList;
     }
 
     public static ArrayList<ArrayList<ArrayList<ItemStack>>> getInputList (String machinetype) {
+        System.out.println("machinetype: " + machinetype);
+        System.out.println("List of this type: " + getRecipeList(machinetype));
         ArrayList<ArrayList<ArrayList<ItemStack>>> inputList = new ArrayList<>();
 
-        for (MachineRecipe recipe : getRecipeList(machinetype))
+        for (MachineRecipe recipe : getRecipeList(machinetype)) {
+            System.out.println("MachineRecipe: " + recipe);
             inputList.add(recipe.getInputStackList());
+        }
 
         return inputList;
     }

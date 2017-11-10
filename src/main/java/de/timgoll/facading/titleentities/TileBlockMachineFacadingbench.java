@@ -1,7 +1,6 @@
 package de.timgoll.facading.titleentities;
 
 import de.timgoll.facading.misc.CustomRecipeRegistry;
-import de.timgoll.facading.misc.RecipeHandlerFacadingBench;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileBlockMachineFacadingbench extends TileBlockMachineBase {

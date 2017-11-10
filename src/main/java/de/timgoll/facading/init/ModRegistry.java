@@ -18,8 +18,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ModRegistry {
 
-	public static final List<Block> BLOCKS = new ArrayList<>();
-	public static final List<Item> ITEMS = new ArrayList<>();
+	public static final ArrayList<Block> BLOCKS = new ArrayList<>();
+	public static final ArrayList<Item>  ITEMS  = new ArrayList<>();
 	
 	public static final CreativeTabs TAB = new CreativeTabs(Facading.MODID) {
 
@@ -34,7 +34,9 @@ public class ModRegistry {
 	//BLOCKS
 	public static final BlockMachineFrame         BLOCK_MACHINEFRAME   = new BlockMachineFrame("machineframe");
 	public static final BlockMachineFacadingbench BLOCK_FACADINGBENCH  = new BlockMachineFacadingbench("facadingbench");
-	public static final BlockPress                BLOCK_PRESS          = new BlockPress("press");
+	public static final BlockMachinePress         BLOCK_PRESS          = new BlockMachinePress("press");
+	public static final BlockMachineNailMaker     BLOCK_NAILMAKER      = new BlockMachineNailMaker("nailmaker");
+	public static final BlockMachineSawmill       BLOCK_SAWMILL        = new BlockMachineSawmill("sawmill");
 
 	public static final BlockFacade               BLOCK_FACADE         = new BlockFacade("facade");
 
@@ -45,6 +47,8 @@ public class ModRegistry {
 	public static final Item ITEM_MACHINEFRAME          = BLOCK_MACHINEFRAME.registerBlockItem();
 	public static final Item ITEM_FACADINGBENCH         = BLOCK_FACADINGBENCH.registerBlockItem();
 	public static final Item ITEM_PRESS                 = BLOCK_PRESS.registerBlockItem();
+	public static final Item ITEM_NAILMAKER             = BLOCK_NAILMAKER.registerBlockItem();
+	public static final Item ITEM_SAWMILL               = BLOCK_SAWMILL.registerBlockItem();
 
 	public static final Item ITEM_FACADE                = BLOCK_FACADE.registerBlockItem();
 

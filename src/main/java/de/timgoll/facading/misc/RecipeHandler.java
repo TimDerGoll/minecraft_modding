@@ -42,7 +42,9 @@ public class RecipeHandler {
         addDiamondPlate();
         addDemerald();
 
-        OreDictionary.getOres("iron");
+        addNail();
+
+        addFramebundle();
     }
 
     /* ** RECIPES ** */
@@ -315,6 +317,26 @@ public class RecipeHandler {
                 new ItemStack(ModRegistry.ITEM_DEMERALD, 1),
                 2500,
                 new ItemStack(ModRegistry.ITEM_UNCOMPRESSED_DEMERALD)
+        );
+    }
+
+
+
+    private void addNail() {
+        CustomRecipeRegistry.addMachineRecipe(
+                "nailmaker",
+                new ItemStack(ModRegistry.ITEM_BOXOFNAILS, 2),
+                500,
+                "ingotIron"
+        );
+    }
+
+    private void addFramebundle() {
+        CustomRecipeRegistry.addMachineRecipe(
+                "sawmill",
+                new ItemStack(ModRegistry.ITEM_FRAMEBUNDLE, 8),
+                2500,
+                "plankWood"
         );
     }
 }

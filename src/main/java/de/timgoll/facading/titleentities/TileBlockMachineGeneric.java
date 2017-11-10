@@ -1,6 +1,7 @@
 package de.timgoll.facading.titleentities;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,8 @@ public class TileBlockMachineGeneric extends TileBlockMachineBase {
         outputSlots.add(3);
         outputSlots.add(4);
         outputSlots.add(5);
+
+        inventory = new ItemStackHandler(6);
     }
 
     @Override

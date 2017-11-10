@@ -5,7 +5,6 @@ import de.timgoll.facading.client.gui.buttons.ButtonMachinePreview;
 import de.timgoll.facading.client.gui.buttons.ButtonMachineSquare;
 import de.timgoll.facading.container.ContainerMachineFacadingbench;
 import de.timgoll.facading.misc.CustomRecipeRegistry;
-import de.timgoll.facading.misc.RecipeHandlerFacadingBench;
 import de.timgoll.facading.titleentities.TileBlockMachineFacadingbench;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;

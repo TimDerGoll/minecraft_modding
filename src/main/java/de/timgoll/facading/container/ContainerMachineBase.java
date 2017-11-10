@@ -17,13 +17,13 @@ public class ContainerMachineBase extends Container {
 
     EntityPlayer player;
     World world;
-    TileBlockMachineBase tileBlockMachineBase;
+    TileBlockMachineBase tileBlockMachine;
 
     public ContainerMachineBase(InventoryPlayer inventoryPlayer, TileBlockMachineBase tileBlockMachineBase) {
         //Handle data transfer
         this.player = inventoryPlayer.player;
         this.world = player.world;
-        this.tileBlockMachineBase = tileBlockMachineBase;
+        this.tileBlockMachine = tileBlockMachineBase;
     }
 
     @Override
@@ -77,14 +77,14 @@ public class ContainerMachineBase extends Container {
      * The production is cancelled. Send response to all players in 6 Blocks range
      */
     public void productionCanceled() {
-        this.tileBlockMachineBase.cancelProduction();
+        this.tileBlockMachine.cancelProduction();
 
         if (!this.world.isRemote) {
-            BlockPos pos = this.tileBlockMachineBase.getPos();
+            BlockPos pos = this.tileBlockMachine.getPos();
 
             PacketHandler.INSTANCE.sendToAllAround(
                     new PackedGuiFinishedProduction(
-                            this.tileBlockMachineBase.getOutputBlocks_amount(),
+                            this.tileBlockMachine.getOutputBlocks_amount(),
                             pos.getX(),
                             pos.getY(),
                             pos.getZ()
@@ -98,15 +98,15 @@ public class ContainerMachineBase extends Container {
      * a new order is sent. Send response after server verification of the order
      */
     public void productionAdded(int outputBlocks_index) {
-        this.tileBlockMachineBase.addProduction(outputBlocks_index);
+        this.tileBlockMachine.addProduction(outputBlocks_index);
 
         if (!this.world.isRemote) {
-            BlockPos pos = this.tileBlockMachineBase.getPos();
+            BlockPos pos = this.tileBlockMachine.getPos();
 
             PacketHandler.INSTANCE.sendToAllAround(
                     new PacketGuiAddProduction(
-                            this.tileBlockMachineBase.getOutputBlocks_amount(),
-                            this.tileBlockMachineBase.getOutputBlocks_indexProducing(),
+                            this.tileBlockMachine.getOutputBlocks_amount(),
+                            this.tileBlockMachine.getOutputBlocks_indexProducing(),
                             pos.getX(),
                             pos.getY(),
                             pos.getZ()

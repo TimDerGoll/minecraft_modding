@@ -2,11 +2,9 @@ package de.timgoll.facading.container;
 
 import de.timgoll.facading.container.slots.SlotFacadingbench;
 import de.timgoll.facading.init.ModRegistry;
-import de.timgoll.facading.misc.RecipeHandlerFacadingBench;
 import de.timgoll.facading.network.PacketHandler;
 import de.timgoll.facading.network.packets.PacketGuiOpened;
 import de.timgoll.facading.titleentities.TileBlockMachineBase;
-import de.timgoll.facading.titleentities.TileBlockMachineFacadingbench;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -115,19 +113,19 @@ public class ContainerMachineFacadingbench extends ContainerMachineBase {
     @Override
     public void guiOpened() {
         if (!this.world.isRemote) {
-            BlockPos pos = this.tileBlockMachineBase.getPos();
+            BlockPos pos = this.tileBlockMachine.getPos();
 
             PacketHandler.INSTANCE.sendTo(
                     new PacketGuiOpened(
-                            this.tileBlockMachineBase.getProductionTicks(),
-                            this.tileBlockMachineBase.getElapsedTicksProducing(),
-                            this.tileBlockMachineBase.getDisassembleTicks(),
-                            this.tileBlockMachineBase.getElapsedDisassembleTicks(),
-                            this.tileBlockMachineBase.getOutputBlocks_amount(),
-                            this.tileBlockMachineBase.getOutputBlocks_indexProducing(),
-                            this.tileBlockMachineBase.getIsPowered(),
-                            this.tileBlockMachineBase.getIsProducing(),
-                            this.tileBlockMachineBase.getIsDisassembling(),
+                            this.tileBlockMachine.getProductionTicks(),
+                            this.tileBlockMachine.getElapsedTicksProducing(),
+                            this.tileBlockMachine.getDisassembleTicks(),
+                            this.tileBlockMachine.getElapsedDisassembleTicks(),
+                            this.tileBlockMachine.getOutputBlocks_amount(),
+                            this.tileBlockMachine.getOutputBlocks_indexProducing(),
+                            this.tileBlockMachine.getIsPowered(),
+                            this.tileBlockMachine.getIsProducing(),
+                            this.tileBlockMachine.getIsDisassembling(),
                             pos.getX(),
                             pos.getY(),
                             pos.getZ()

@@ -2,24 +2,23 @@ package de.timgoll.facading.blocks;
 
 import de.timgoll.facading.Facading;
 import de.timgoll.facading.client.gui.GuiHandler;
-import de.timgoll.facading.titleentities.TileBlockMachinePress;
+import de.timgoll.facading.titleentities.TileBlockMachineNailMaker;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 
-public class BlockPress extends BlockMachineBase {
+public class BlockMachineNailMaker extends BlockMachineBase {
 
-    public BlockPress(String name) {
+    public BlockMachineNailMaker(String name) {
         super(name);
     }
-
-
 
 
     /**
@@ -27,10 +26,10 @@ public class BlockPress extends BlockMachineBase {
      */
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        TileBlockMachinePress te = (TileBlockMachinePress) world.getTileEntity(pos);
+        TileBlockMachineNailMaker te = (TileBlockMachineNailMaker) world.getTileEntity(pos);
 
         if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) { //North is just a placeholder, direction irrelevant
-            player.openGui(Facading.INSTANCE, GuiHandler.GUI_PRESS_CONTAINER_ID, world, pos.getX(), pos.getY(), pos.getZ());
+            player.openGui(Facading.INSTANCE, GuiHandler.GUI_NAILMAKER_CONTAINER_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
 
         return true;
@@ -42,7 +41,7 @@ public class BlockPress extends BlockMachineBase {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileBlockMachinePress();
+        return new TileBlockMachineNailMaker();
     }
 
 }
