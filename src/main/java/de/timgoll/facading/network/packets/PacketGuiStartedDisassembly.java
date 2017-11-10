@@ -14,18 +14,27 @@ public class PacketGuiStartedDisassembly implements IMessage {
     //data to transmit
 
     private int disassemblyTicks;
+    private long posX;
+    private long posY;
+    private long posZ;
 
     //data to transmit END
 
     public PacketGuiStartedDisassembly() {}
 
-    public PacketGuiStartedDisassembly(int productionTicks) {
+    public PacketGuiStartedDisassembly(int productionTicks, long posX, long posY, long posZ) {
         this.disassemblyTicks = productionTicks;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(this.disassemblyTicks);
+        buf.writeLong(this.posX);
+        buf.writeLong(this.posY);
+        buf.writeLong(this.posZ);
     }
 
     @Override
@@ -33,6 +42,9 @@ public class PacketGuiStartedDisassembly implements IMessage {
         try {
 
             this.disassemblyTicks = buf.readInt();
+            this.posX = buf.readLong();
+            this.posY = buf.readLong();
+            this.posZ = buf.readLong();
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
@@ -51,7 +63,7 @@ public class PacketGuiStartedDisassembly implements IMessage {
         }
 
         void processMessage(PacketGuiStartedDisassembly message) {
-            GuiMachineBase.startedDisassembly(message.disassemblyTicks);
+            GuiMachineBase.startedDisassembly(message.disassemblyTicks, message.posX, message.posY, message.posZ);
         }
     }
 

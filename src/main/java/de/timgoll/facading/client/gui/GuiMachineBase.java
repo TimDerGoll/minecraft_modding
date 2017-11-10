@@ -39,6 +39,10 @@ public class GuiMachineBase extends GuiContainer {
     int progressBarTextureLeft;
     int progressBarTextureTop;
 
+    static long posX;
+    static long posY;
+    static long posZ;
+
     static int itemProductionTicks;
     static double elapsedItemProductionTicks;
     static int itemDisassembleTicks;
@@ -233,7 +237,7 @@ public class GuiMachineBase extends GuiContainer {
      * @param _isProducing is the machine producing
      * @param _isDisassembling is the machine disassembling
      */
-    public static void setPacketGuiOpened(int _itemProductionTicks, int _elapsedItemProductionTicks, int _itemDisassembleTicks, int _elapsedItemDisassembleTicks, int _outputBlocks_amount, int _outputBlocks_index_producing, boolean _isPowered, boolean _isProducing, boolean _isDisassembling) {
+    public static void setPacketGuiOpened(int _itemProductionTicks, int _elapsedItemProductionTicks, int _itemDisassembleTicks, int _elapsedItemDisassembleTicks, int _outputBlocks_amount, int _outputBlocks_index_producing, boolean _isPowered, boolean _isProducing, boolean _isDisassembling, long _posX, long _posY, long _posZ) {
         itemProductionTicks          = _itemProductionTicks;
         elapsedItemProductionTicks   = (double) _elapsedItemProductionTicks;
         itemDisassembleTicks         = _itemDisassembleTicks;
@@ -244,13 +248,17 @@ public class GuiMachineBase extends GuiContainer {
         isPowered                    = _isPowered;
         isProducing                  = _isProducing;
         isDisassembling              = _isDisassembling;
+
+        posX = _posX; posY = _posY; posZ = _posZ;
     }
 
-    public static void setPacketGuiOpened(int _itemProductionTicks, int _elapsedItemProductionTicks, boolean _isPowered, boolean _isProducing) {
+    public static void setPacketGuiOpened(int _itemProductionTicks, int _elapsedItemProductionTicks, boolean _isPowered, boolean _isProducing, long _posX, long _posY, long _posZ) {
         itemProductionTicks          = _itemProductionTicks;
         elapsedItemProductionTicks   = (double) _elapsedItemProductionTicks;
         isPowered                    = _isPowered;
         isProducing                  = _isProducing;
+
+        posX = _posX; posY = _posY; posZ = _posZ;
     }
 
     /**
@@ -259,7 +267,10 @@ public class GuiMachineBase extends GuiContainer {
      * @param _outputBlocks_amount amount of blocks to produce
      * @param _outputBlocks_index_producing block ID which is produced
      */
-    public static void setProduction(int _outputBlocks_amount, int _outputBlocks_index_producing) {
+    public static void setProduction(int _outputBlocks_amount, int _outputBlocks_index_producing, long _posX, long _posY, long _posZ) {
+        if (posX != _posX || posY != _posY || posZ != _posZ)
+            return;
+
         outputBlocks_amount          = _outputBlocks_amount;
         outputBlocks_index_producing = _outputBlocks_index_producing;
     }
@@ -268,7 +279,10 @@ public class GuiMachineBase extends GuiContainer {
      * production is started and massaged to GUI. It is necessary to sync the progress bar
      * @param _itemProductionTicks needed ticks to produce item
      */
-    public static void startedProduction(int _itemProductionTicks) {
+    public static void startedProduction(int _itemProductionTicks, long _posX, long _posY, long _posZ) {
+        if (posX != _posX || posY != _posY || posZ != _posZ)
+            return;
+
         itemProductionTicks        = _itemProductionTicks;
         elapsedItemProductionTicks = 0; //not needed, but for convenience
         isProducing = true;
@@ -278,7 +292,10 @@ public class GuiMachineBase extends GuiContainer {
      * disassembly is started and massaged to GUI. It is necessary to sync the progress bar
      * @param _itemDisassembleTicks needed ticks to disassemble item
      */
-    public static void startedDisassembly(int _itemDisassembleTicks) {
+    public static void startedDisassembly(int _itemDisassembleTicks, long _posX, long _posY, long _posZ) {
+        if (posX != _posX || posY != _posY || posZ != _posZ)
+            return;
+
         itemDisassembleTicks        = _itemDisassembleTicks;
         elapsedItemDisassembleTicks = 0; //not needed, but for convenience
         isDisassembling             = true;
@@ -289,7 +306,10 @@ public class GuiMachineBase extends GuiContainer {
      * to keep the gui synced to the server
      * @param _outputBlocks_amount amount of blocks to produce
      */
-    public static void finishedProduction(int _outputBlocks_amount) {
+    public static void finishedProduction(int _outputBlocks_amount, long _posX, long _posY, long _posZ) {
+        if (posX != _posX || posY != _posY || posZ != _posZ)
+            return;
+
         outputBlocks_amount        = _outputBlocks_amount;
         elapsedItemProductionTicks = 0; //not needed, but for convenience
         isProducing = false;
@@ -300,7 +320,10 @@ public class GuiMachineBase extends GuiContainer {
      * and the powerindicator if the energysource is lost
      * @param _isPowered true if the machine is powered, false if not
      */
-    public static void setPowered(boolean _isPowered) {
+    public static void setPowered(boolean _isPowered, long _posX, long _posY, long _posZ) {
+        if (posX != _posX || posY != _posY || posZ != _posZ)
+            return;
+
         isPowered = _isPowered;
     }
 }

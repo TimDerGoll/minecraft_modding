@@ -14,18 +14,27 @@ public class PacketGuiStartedProduction implements IMessage {
     //data to transmit
 
     private int productionTicks;
+    private long posX;
+    private long posY;
+    private long posZ;
 
     //data to transmit END
 
     public PacketGuiStartedProduction() {}
 
-    public PacketGuiStartedProduction(int productionTicks) {
+    public PacketGuiStartedProduction(int productionTicks, long posX, long posY, long posZ) {
         this.productionTicks = productionTicks;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(this.productionTicks);
+        buf.writeLong(this.posX);
+        buf.writeLong(this.posY);
+        buf.writeLong(this.posZ);
     }
 
     @Override
@@ -33,6 +42,9 @@ public class PacketGuiStartedProduction implements IMessage {
         try {
 
             this.productionTicks = buf.readInt();
+            this.posX = buf.readLong();
+            this.posY = buf.readLong();
+            this.posZ = buf.readLong();
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
@@ -51,7 +63,7 @@ public class PacketGuiStartedProduction implements IMessage {
         }
 
         void processMessage(PacketGuiStartedProduction message) {
-            GuiMachineBase.startedProduction(message.productionTicks);
+            GuiMachineBase.startedProduction(message.productionTicks, message.posX, message.posY, message.posZ);
         }
     }
 }

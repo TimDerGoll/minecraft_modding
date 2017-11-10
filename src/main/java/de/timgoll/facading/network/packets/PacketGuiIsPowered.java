@@ -14,24 +14,37 @@ public class PacketGuiIsPowered implements IMessage {
     //data to transmit
 
     private boolean isWorking;
+    private long posX;
+    private long posY;
+    private long posZ;
 
     //data to transmit END
 
     public PacketGuiIsPowered() {}
 
-    public PacketGuiIsPowered(boolean isWorking) {
+    public PacketGuiIsPowered(boolean isWorking, long posX, long posY, long posZ) {
         this.isWorking = isWorking;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeBoolean(this.isWorking);
+        buf.writeLong(this.posX);
+        buf.writeLong(this.posY);
+        buf.writeLong(this.posZ);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         try {
+
             this.isWorking = buf.readBoolean();
+            this.posX = buf.readLong();
+            this.posY = buf.readLong();
+            this.posZ = buf.readLong();
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
@@ -50,7 +63,7 @@ public class PacketGuiIsPowered implements IMessage {
         }
 
         void processMessage(PacketGuiIsPowered message) {
-            GuiMachineBase.setPowered(message.isWorking);
+            GuiMachineBase.setPowered(message.isWorking, message.posX, message.posY, message.posZ);
         }
     }
 

@@ -27,6 +27,10 @@ public class PacketGuiOpened implements IMessage {
 
     private boolean isGeneric;
 
+    private long posX;
+    private long posY;
+    private long posZ;
+
     //data to transmit END
 
     //called, if no data is attached
@@ -42,7 +46,7 @@ public class PacketGuiOpened implements IMessage {
      * @param elapsedItemDisassembleTicks ticks elapsed since disassbly started
      * @param outputBlocks_amount how much to produce
      */
-    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int outputBlocks_amount, int outputBlocks_index_producing, boolean isPowered, boolean isWorking, boolean isDisassembling) {
+    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, int itemDisassembleTicks, int elapsedItemDisassembleTicks, int outputBlocks_amount, int outputBlocks_index_producing, boolean isPowered, boolean isWorking, boolean isDisassembling, long posX, long posY, long posZ) {
         this.itemProduceTicks             = itemProduceTicks;
         this.elapsedItemProduceTicks      = elapsedItemProduceTicks;
         this.itemDisassembleTicks         = itemDisassembleTicks;
@@ -53,15 +57,23 @@ public class PacketGuiOpened implements IMessage {
         this.isWorking                    = isWorking;
         this.isDisassembling              = isDisassembling;
 
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+
         this.isValid = true;
         this.isGeneric = false;
     }
 
-    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, boolean isPowered, boolean isWorking) {
+    public PacketGuiOpened(int itemProduceTicks, int elapsedItemProduceTicks, boolean isPowered, boolean isWorking, long posX, long posY, long posZ) {
         this.itemProduceTicks             = itemProduceTicks;
         this.elapsedItemProduceTicks      = elapsedItemProduceTicks;
         this.isPowered                    = isPowered;
         this.isWorking                    = isWorking;
+
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
 
         this.isValid = true;
         this.isGeneric = true;
@@ -76,6 +88,10 @@ public class PacketGuiOpened implements IMessage {
         buf.writeBoolean(this.isPowered);
         buf.writeBoolean(this.isWorking);
         buf.writeBoolean(this.isGeneric);
+
+        buf.writeLong(this.posX);
+        buf.writeLong(this.posY);
+        buf.writeLong(this.posZ);
 
         if (this.isGeneric)
             return;
@@ -96,6 +112,10 @@ public class PacketGuiOpened implements IMessage {
             this.isPowered                    = buf.readBoolean();
             this.isWorking                    = buf.readBoolean();
             this.isGeneric                    = buf.readBoolean();
+
+            this.posX = buf.readLong();
+            this.posY = buf.readLong();
+            this.posZ = buf.readLong();
 
             if (this.isGeneric)
                 return;
@@ -131,7 +151,10 @@ public class PacketGuiOpened implements IMessage {
                         message.itemProduceTicks,
                         message.elapsedItemProduceTicks,
                         message.isPowered,
-                        message.isWorking
+                        message.isWorking,
+                        message.posX,
+                        message.posY,
+                        message.posZ
                 );
             } else {
                 GuiMachineBase.setPacketGuiOpened(
@@ -143,7 +166,10 @@ public class PacketGuiOpened implements IMessage {
                         message.outputBlocks_index_producing,
                         message.isPowered,
                         message.isWorking,
-                        message.isDisassembling
+                        message.isDisassembling,
+                        message.posX,
+                        message.posY,
+                        message.posZ
                 );
             }
         }

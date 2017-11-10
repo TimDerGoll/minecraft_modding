@@ -1,8 +1,8 @@
 package de.timgoll.facading.container;
 
 import de.timgoll.facading.network.PacketHandler;
+import de.timgoll.facading.network.packets.PackedGuiFinishedProduction;
 import de.timgoll.facading.network.packets.PacketGuiAddProduction;
-import de.timgoll.facading.network.packets.PacketGuiCancelProduction;
 import de.timgoll.facading.titleentities.TileBlockMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -83,9 +83,11 @@ public class ContainerMachineBase extends Container {
             BlockPos pos = this.tileBlockMachineBase.getPos();
 
             PacketHandler.INSTANCE.sendToAllAround(
-                    new PacketGuiCancelProduction(
+                    new PackedGuiFinishedProduction(
                             this.tileBlockMachineBase.getOutputBlocks_amount(),
-                            this.tileBlockMachineBase.getOutputBlocks_indexProducing()
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
                     ),
                     new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
             );
@@ -104,7 +106,10 @@ public class ContainerMachineBase extends Container {
             PacketHandler.INSTANCE.sendToAllAround(
                     new PacketGuiAddProduction(
                             this.tileBlockMachineBase.getOutputBlocks_amount(),
-                            this.tileBlockMachineBase.getOutputBlocks_indexProducing()
+                            this.tileBlockMachineBase.getOutputBlocks_indexProducing(),
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
                     ),
                     new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
             );

@@ -12,6 +12,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -114,6 +115,8 @@ public class ContainerMachineFacadingbench extends ContainerMachineBase {
     @Override
     public void guiOpened() {
         if (!this.world.isRemote) {
+            BlockPos pos = this.tileBlockMachineBase.getPos();
+
             PacketHandler.INSTANCE.sendTo(
                     new PacketGuiOpened(
                             this.tileBlockMachineBase.getProductionTicks(),
@@ -124,7 +127,10 @@ public class ContainerMachineFacadingbench extends ContainerMachineBase {
                             this.tileBlockMachineBase.getOutputBlocks_indexProducing(),
                             this.tileBlockMachineBase.getIsPowered(),
                             this.tileBlockMachineBase.getIsProducing(),
-                            this.tileBlockMachineBase.getIsDisassembling()
+                            this.tileBlockMachineBase.getIsDisassembling(),
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
                     ),
                     (EntityPlayerMP) this.player
             );

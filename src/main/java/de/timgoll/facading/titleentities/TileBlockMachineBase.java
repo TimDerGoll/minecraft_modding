@@ -167,7 +167,6 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
 
 
-
     @Override
     public void update() {
         if (world.isRemote)
@@ -402,25 +401,34 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
      * @return the state
      */
     private boolean outputCanBeInserted(ArrayList<ItemStack> outputStacks, ArrayList<Integer> slots) {
-        System.out.println("outputStacks: " + outputStacks);
+        int emptySlots = 0;
+        int usedEmptySlots = 0;
+
+        //search for empty slots
+        for (int slot : slots)
+            if (inventory.getStackInSlot(slot).isEmpty())
+                emptySlots++;
+
+        //search for not empty ItemStacks to insert more items
         for (ItemStack outputStack : outputStacks) {
-            int freeslots = 0;
+            int freeStackSlots = 0;
             int i;
             for (i = 0; i < slots.size(); i++) {
-                if (inventory.getStackInSlot(slots.get(i)).isEmpty())
-                    break;
-
                 if (inventory.getStackInSlot(slots.get(i)).getItem().equals(outputStack.getItem()))
-                    freeslots += outputStack.getMaxStackSize() - inventory.getStackInSlot(slots.get(i)).getCount();
+                    freeStackSlots += outputStack.getMaxStackSize() - inventory.getStackInSlot(slots.get(i)).getCount();
 
-                if (freeslots >= outputStack.getCount())
+                if (freeStackSlots >= outputStack.getCount())
                     break;
 
             }
-            //item not found:
-            if (i == slots.size())
-                return false;
+            //ItemStack not found:
+            if (i == slots.size()) {
+                //check if empty slot is available
+                if (emptySlots <= usedEmptySlots)
+                    return false;
 
+                usedEmptySlots++;
+            }
         }
 
         return true;
@@ -439,10 +447,20 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
      * @param slots an ArrayList with the slots in the ContainerInventory
      */
     private void insertOutput(ArrayList<ItemStack> outputStacks, ArrayList<Integer> slots) {
+        //search for empty slots
+        ArrayList<Integer> emptySlotIDs = new ArrayList<>();
+        for (int slot : slots)
+            if (inventory.getStackInSlot(slot).isEmpty())
+                emptySlotIDs.add(slot);
+
         for (ItemStack _outputStack : outputStacks) {
             ItemStack outputStack = _outputStack.copy();
+            //FIRST: Try to insert into existing stack
             for (int slot : slots) {
-                if (!inventory.getStackInSlot(slot).getItem().equals(outputStack.getItem()) && !inventory.getStackInSlot(slot).isEmpty())
+                if (inventory.getStackInSlot(slot).isEmpty())
+                    continue;
+
+                if (!inventory.getStackInSlot(slot).getItem().equals(outputStack.getItem()))
                     continue;
 
                 int freespace = outputStack.getMaxStackSize() - inventory.getStackInSlot(slot).getCount();
@@ -453,8 +471,14 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
                     outputStack = splitted;
                 } else {
                     inventory.insertItem(slot, outputStack, false);
+                    outputStack.setCount(0);
                     break;
                 }
+            }
+            //SECOND: If complete insertion wasn't possible, insert into empty slot
+            if (outputStack.getCount() > 0) {
+                inventory.insertItem(emptySlotIDs.get(0), outputStack, false);
+                emptySlotIDs.remove(0);
             }
         }
     }
@@ -490,11 +514,10 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
                     tmpStackList,
                     inputSlots
             );
-            isProducing           = false;
-            outputBlocks_amount   = 0;
-            elapsedTicksProducing = 0;
-            sendFinishedProductionMessage();
         }
+        isProducing           = false;
+        outputBlocks_amount   = 0;
+        elapsedTicksProducing = 0;
     }
 
 
@@ -504,7 +527,10 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
             PacketHandler.INSTANCE.sendToAllAround(
                     new PacketGuiIsPowered(
-                            isPowered
+                            isPowered,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
                     ),
                     new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
             );
@@ -517,7 +543,10 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
             PacketHandler.INSTANCE.sendToAllAround(
                     new PacketGuiStartedProduction(
-                            productionTicks
+                            productionTicks,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
                     ),
                     new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
             );
@@ -531,7 +560,10 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
             PacketHandler.INSTANCE.sendToAllAround(
                     new PacketGuiStartedDisassembly(
-                            disassemblyTicks
+                            disassemblyTicks,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
                     ),
                     new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
             );
@@ -544,7 +576,10 @@ public class TileBlockMachineBase extends TileEntity implements ITickable {
 
             PacketHandler.INSTANCE.sendToAllAround(
                     new PackedGuiFinishedProduction(
-                            outputBlocks_amount
+                            outputBlocks_amount,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
                     ),
                     new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 6)
             );

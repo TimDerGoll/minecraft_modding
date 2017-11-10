@@ -14,18 +14,27 @@ public class PackedGuiFinishedProduction implements IMessage {
     //data to transmit
 
     private int outputBlocks_amount;
+    private long posX;
+    private long posY;
+    private long posZ;
 
     //data to transmit END
 
     public PackedGuiFinishedProduction() {}
 
-    public PackedGuiFinishedProduction(int outputBlocks_amount) {
+    public PackedGuiFinishedProduction(int outputBlocks_amount, long posX, long posY, long posZ) {
         this.outputBlocks_amount = outputBlocks_amount;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(this.outputBlocks_amount);
+        buf.writeLong(this.posX);
+        buf.writeLong(this.posY);
+        buf.writeLong(this.posZ);
     }
 
     @Override
@@ -33,6 +42,9 @@ public class PackedGuiFinishedProduction implements IMessage {
         try {
 
             this.outputBlocks_amount = buf.readInt();
+            this.posX = buf.readLong();
+            this.posY = buf.readLong();
+            this.posZ = buf.readLong();
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
@@ -51,7 +63,7 @@ public class PackedGuiFinishedProduction implements IMessage {
         }
 
         void processMessage(PackedGuiFinishedProduction message) {
-            GuiMachineBase.finishedProduction(message.outputBlocks_amount);
+            GuiMachineBase.finishedProduction(message.outputBlocks_amount, message.posX, message.posY, message.posZ);
         }
     }
 }

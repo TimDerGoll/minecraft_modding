@@ -15,20 +15,30 @@ public class PacketGuiAddProduction implements IMessage {
 
     private int outputBlocks_amount;
     private int outputBlocks_index_producing;
+    private long posX;
+    private long posY;
+    private long posZ;
+
 
     //data to transmit END
 
     public PacketGuiAddProduction() {}
 
-    public PacketGuiAddProduction(int outputBlocks_amount, int outputBlocks_index_producing) {
+    public PacketGuiAddProduction(int outputBlocks_amount, int outputBlocks_index_producing, long posX, long posY, long posZ) {
         this.outputBlocks_amount = outputBlocks_amount;
         this.outputBlocks_index_producing = outputBlocks_index_producing;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(this.outputBlocks_amount);
         buf.writeInt(this.outputBlocks_index_producing);
+        buf.writeLong(this.posX);
+        buf.writeLong(this.posY);
+        buf.writeLong(this.posZ);
     }
 
     @Override
@@ -37,6 +47,9 @@ public class PacketGuiAddProduction implements IMessage {
 
             this.outputBlocks_amount = buf.readInt();
             this.outputBlocks_index_producing = buf.readInt();
+            this.posX = buf.readLong();
+            this.posY = buf.readLong();
+            this.posZ = buf.readLong();
 
         } catch (IndexOutOfBoundsException ioe) {
             Utils.getLogger().catching(ioe);
@@ -56,7 +69,7 @@ public class PacketGuiAddProduction implements IMessage {
         }
 
         void processMessage(PacketGuiAddProduction message) {
-            GuiMachineBase.setProduction(message.outputBlocks_amount, message.outputBlocks_index_producing);
+            GuiMachineBase.setProduction(message.outputBlocks_amount, message.outputBlocks_index_producing, message.posX, message.posY, message.posZ);
         }
     }
 

@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSaddle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -71,7 +72,6 @@ public class ContainerMachinePress extends ContainerMachineBase {
         List<Item> allowedItems = new ArrayList<>();
 
         for (ArrayList<ArrayList<ItemStack>> inputStackList : CustomRecipeRegistry.getInputList("press")) {
-            System.out.println(inputStackList);
             for (ItemStack inputStack : inputStackList.get(0))
                 allowedItems.add(inputStack.getItem() );
         }
@@ -95,14 +95,21 @@ public class ContainerMachinePress extends ContainerMachineBase {
 
     @Override
     public void guiOpened() {
-        PacketHandler.INSTANCE.sendTo(
-                new PacketGuiOpened(
-                        this.tileBlockMachineBase.getProductionTicks(),
-                        this.tileBlockMachineBase.getElapsedTicksProducing(),
-                        this.tileBlockMachineBase.getIsPowered(),
-                        this.tileBlockMachineBase.getIsProducing()
-                ),
-                (EntityPlayerMP) this.player
-        );
+        if (!this.world.isRemote) {
+            BlockPos pos = this.tileBlockMachineBase.getPos();
+
+            PacketHandler.INSTANCE.sendTo(
+                    new PacketGuiOpened(
+                            this.tileBlockMachineBase.getProductionTicks(),
+                            this.tileBlockMachineBase.getElapsedTicksProducing(),
+                            this.tileBlockMachineBase.getIsPowered(),
+                            this.tileBlockMachineBase.getIsProducing(),
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
+                    ),
+                    (EntityPlayerMP) this.player
+            );
+        }
     }
 }
