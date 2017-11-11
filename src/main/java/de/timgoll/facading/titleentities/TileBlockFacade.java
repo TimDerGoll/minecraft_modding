@@ -5,20 +5,91 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
 
-//https://gitlab.com/p455w0rd/p455w0rdsThings/blob/master/src/main/java/p455w0rd/p455w0rdsthings/blocks/tileentities/TileMachineBase.java#L254-268
-
 public class TileBlockFacade extends TileEntity {
-    private final String TAG_STATE = "state";
 
-
-    public boolean isSlab = false;
+    private byte blockState = 0b00000000; //only 6 bits used // 0x 0 0 north south west east up down
 
     public TileBlockFacade() {
 
     }
+
+    public void transform(EnumFacing facing) {
+        switch (facing) {
+            case NORTH:
+                transformNorth(); break;
+            case SOUTH:
+                transformSouth(); break;
+            case WEST:
+                transformWest(); break;
+            case EAST:
+                transformEast(); break;
+            case UP:
+                transformUp(); break;
+            case DOWN:
+                transformDown(); break;
+            default:
+                transformDefault(); break;
+        }
+        //set state to render
+    }
+
+    private void transformNorth() {
+        byte setNorth = 0b00100000;
+        byte setSouth = 0b00101111;
+
+        blockState = (byte) (blockState & ~(1 << setNorth));
+        blockState = (byte) (blockState |  (1 << setSouth));
+    }
+
+    private void transformSouth() {
+        byte setNorth = 0b00011111;
+        byte setSouth = 0b00010000;
+
+        blockState = (byte) (blockState |  (1 << setNorth));
+        blockState = (byte) (blockState & ~(1 << setSouth));
+    }
+
+    private void transformWest() {
+        byte setWest = 0b00001000;
+        byte setEast = 0b00111011;
+
+        blockState = (byte) (blockState & ~(1 << setWest));
+        blockState = (byte) (blockState |  (1 << setEast));
+    }
+
+    private void transformEast() {
+        byte setWest = 0b00000100;
+        byte setEast = 0b00110111;
+
+        blockState = (byte) (blockState |  (1 << setWest));
+        blockState = (byte) (blockState & ~(1 << setEast));
+    }
+
+    private void transformUp() {
+        byte setUp   = 0b00000010;
+        byte setDown = 0b00111110;
+
+        blockState = (byte) (blockState & ~(1 << setUp));
+        blockState = (byte) (blockState |  (1 << setDown));
+    }
+
+    private void transformDown() {
+        byte setUp   = 0b00000001;
+        byte setDown = 0b00111101;
+
+        blockState = (byte) (blockState |  (1 << setUp));
+        blockState = (byte) (blockState & ~(1 << setDown));
+    }
+
+    private void transformDefault() {
+        blockState = 0b00000000;
+    }
+
+
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
@@ -26,7 +97,7 @@ public class TileBlockFacade extends TileEntity {
 
         //nbtList.setBoolean("isSlab", isSlab);
 
-        compound.setBoolean("isSlab", isSlab);
+        compound.setByte("blockState", blockState);
         super.writeToNBT(compound);
         return compound;
     }
@@ -34,7 +105,7 @@ public class TileBlockFacade extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        isSlab = compound.getBoolean("isSlab");
+        blockState = compound.getByte("blockState");
     }
 
 

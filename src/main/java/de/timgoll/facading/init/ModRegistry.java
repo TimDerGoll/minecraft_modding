@@ -80,11 +80,11 @@ public class ModRegistry {
 
 	//TOOLS
 	public static Item.ToolMaterial TM_DEMERALD         = EnumHelper.addToolMaterial("tm_demerald", 3, 3500, 10F, 4.5F, 16);
-	public static final Item DEMERALD_PICKAXE           = new ItemToolDemeraldPickaxe("demerald_pickaxe");
-	public static final Item DEMERALD_SHOVEL            = new ItemToolDemeraldShovel("demerald_shovel");
-	//public static final Item DEMERALD_AXE               = new ItemToolDemeraldAxe("demerald_axe");
-	public static final Item DEMERALD_HOE               = new ItemToolDemeraldHoe("demerald_hoe");
-	public static final Item DEMERALD_SWORD             = new ItemToolDemeraldSword("demerald_sword");
+	public static final Item TOOL_DEMERALD_PICKAXE      = new ItemToolDemeraldPickaxe("demerald_pickaxe");
+	public static final Item TOOL_DEMERALD_SHOVEL       = new ItemToolDemeraldShovel("demerald_shovel");
+	public static final Item TOOL_DEMERALD_AXE          = new ItemToolDemeraldAxe("demerald_axe");
+	public static final Item TOOL_DEMERALD_HOE          = new ItemToolDemeraldHoe("demerald_hoe");
+	public static final Item TOOL_DEMERALD_SWORD        = new ItemToolDemeraldSword("demerald_sword");
 
 	//SOUNDS
 	public static final SoundEvent SOUND_MACHINE_POWERED = new SoundHandler("machine_powered").getSoundEvent();

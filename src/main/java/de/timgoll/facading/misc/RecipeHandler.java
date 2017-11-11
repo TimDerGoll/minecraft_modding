@@ -16,9 +16,18 @@ import java.util.ArrayList;
 public class RecipeHandler {
 
     public void registerRecipes() {
+        //MINECRAFT: CRAFTING TABLE
         addHammer();
         addToolHolder();
         addWaterMill();
+
+        addUncompressedDemerald();
+
+        addDemeraldAxe();
+        addDemeraldHoe();
+        addDemeraldPickaxe();
+        addDemeraldShovel();
+        addDemeraldSword();
 
         addIronToothSaw();
         addDiamondCicularSaw();
@@ -26,28 +35,38 @@ public class RecipeHandler {
 
         addMachineframe();
 
-        addUncompressedDemerald();
-
         addPress();
         addFacadingbench();
+        addNailmaker();
+        addSawMill();
 
 
-
+        //FACADING INDUSTRY: FACADINGBENCH
         addFacade();
         addPlaceholder();
         addPlaceholder2();
 
+
+        //FACADING INDUSTRY: PRESS
         addReinforcementBundle();
         addEmeraldPlate();
         addDiamondPlate();
         addDemerald();
 
+
+        //FACADING INDUSTRY: NAILMAKER
         addNail();
 
+
+        //FACADING INDUSTRY: SAWMILL
         addFramebundle();
     }
 
-    /* ** RECIPES ** */
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    /// MINECRAFT: CRAFTING TABLE                                                    ///
+    ////////////////////////////////////////////////////////////////////////////////////
+
     private void addHammer() {
         GameRegistry.addShapedRecipe(
             new ResourceLocation("hammer_iron"),
@@ -108,6 +127,85 @@ public class RecipeHandler {
             " W ",
             'W', "plankWood",
             'I', "ingotCopper"
+        );
+    }
+
+    private void addUncompressedDemerald() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("uncompressed_demerald"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.ITEM_UNCOMPRESSED_DEMERALD),
+                " E ",
+                " S ",
+                " D ",
+                'E', ModRegistry.ITEM_EMERALD_PLATE,
+                'S', "slimeball",
+                'D', ModRegistry.ITEM_DIAMOND_PLATE
+        );
+    }
+
+    private void addDemeraldAxe() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("demeraldAxe"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.TOOL_DEMERALD_AXE),
+                "DD ",
+                "DS ",
+                " S ",
+                'D', ModRegistry.ITEM_DEMERALD,
+                'S', "stickWood"
+        );
+    }
+
+    private void addDemeraldHoe() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("demeraldHoe"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.TOOL_DEMERALD_HOE),
+                "DD ",
+                " S ",
+                " S ",
+                'D', ModRegistry.ITEM_DEMERALD,
+                'S', "stickWood"
+        );
+    }
+
+    private void addDemeraldPickaxe() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("demeraldPickaxe"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.TOOL_DEMERALD_PICKAXE),
+                "DDD",
+                " S ",
+                " S ",
+                'D', ModRegistry.ITEM_DEMERALD,
+                'S', "stickWood"
+        );
+    }
+
+    private void addDemeraldShovel() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("demeraldShovel"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.TOOL_DEMERALD_SHOVEL),
+                " D ",
+                " S ",
+                " S ",
+                'D', ModRegistry.ITEM_DEMERALD,
+                'S', "stickWood"
+        );
+    }
+
+    private void addDemeraldSword() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("demeraldSword"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.TOOL_DEMERALD_SWORD),
+                " D ",
+                " D ",
+                " S ",
+                'D', ModRegistry.ITEM_DEMERALD,
+                'S', "stickWood"
         );
     }
 
@@ -172,11 +270,6 @@ public class RecipeHandler {
         );
     }
 
-
-
-
-
-
     private void addMachineframe() {
         GameRegistry.addShapedRecipe(
             new ResourceLocation("machineframe"),
@@ -222,30 +315,44 @@ public class RecipeHandler {
         );
     }
 
-    private void addUncompressedDemerald() {
+    private void addNailmaker() {
         GameRegistry.addShapedRecipe(
-                new ResourceLocation("uncompressed_demerald"),
+                new ResourceLocation("nailmaker"),
                 new ResourceLocation("facading"),
-                new ItemStack(ModRegistry.ITEM_UNCOMPRESSED_DEMERALD),
-                " E ",
-                " S ",
-                " D ",
-                'E', ModRegistry.ITEM_EMERALD_PLATE,
-                'S', "slimeball",
-                'D', ModRegistry.ITEM_DIAMOND_PLATE
+                new ItemStack(ModRegistry.BLOCK_FACADINGBENCH),
+                "WPW",
+                "#MT",
+                "SSS",
+                'P', Blocks.PISTON,
+                'M', ModRegistry.BLOCK_MACHINEFRAME,
+                '#', ModRegistry.ITEM_WATERMILL,
+                'T', ModRegistry.ITEM_TOOLHOLDER,
+                'W', "plankWood",
+                'S', "stone"
+        );
+    }
+
+    private void addSawMill() {
+        GameRegistry.addShapedRecipe(
+                new ResourceLocation("sawmill"),
+                new ResourceLocation("facading"),
+                new ItemStack(ModRegistry.BLOCK_FACADINGBENCH),
+                "W W",
+                "#MT",
+                "SSS",
+                'M', ModRegistry.BLOCK_MACHINEFRAME,
+                '#', ModRegistry.ITEM_WATERMILL,
+                'T', ModRegistry.ITEM_TOOLHOLDER,
+                'W', "plankWood",
+                'S', "stone"
         );
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////
+    /// FACADING INDUSTRY: FACADINGBENCH                                             ///
+    ////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-    // CUSTOM CRAFTING METHODS
     private void addFacade() {
         CustomRecipeRegistry.addMachineRecipe(
                 "facadingbench",
@@ -276,6 +383,10 @@ public class RecipeHandler {
         );
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    /// FACADING INDUSTRY: PRESS                                                     ///
+    ////////////////////////////////////////////////////////////////////////////////////
 
     private void addReinforcementBundle() {
         CustomRecipeRegistry.addMachineRecipe(
@@ -321,6 +432,9 @@ public class RecipeHandler {
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////
+    /// FACADING INDUSTRY: NAILMAKER                                                 ///
+    ////////////////////////////////////////////////////////////////////////////////////
 
     private void addNail() {
         CustomRecipeRegistry.addMachineRecipe(
@@ -330,6 +444,11 @@ public class RecipeHandler {
                 "ingotIron"
         );
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    /// FACADING INDUSTRY: SAWMILL                                                   ///
+    ////////////////////////////////////////////////////////////////////////////////////
 
     private void addFramebundle() {
         CustomRecipeRegistry.addMachineRecipe(
