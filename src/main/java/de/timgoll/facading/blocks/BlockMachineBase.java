@@ -91,9 +91,6 @@ public class BlockMachineBase extends Block implements IHasModel, ITileEntityPro
         keepInventory = true; //set keepInventory to true, so that the TE stores the data without dropping inv
         world.setBlockState(pos, world.getBlockState(pos).getBlock().getDefaultState().withProperty(FACING, iblockstate.getValue((FACING))).withProperty(TYPE, te.getType()), 2);
         keepInventory = false;
-
-        //te.validate();
-        //world.setTileEntity(pos, te);
     }
 
 

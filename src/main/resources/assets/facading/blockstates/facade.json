@@ -1,9 +1,18 @@
 {
   "forge_marker": 1,
   "variants": {
-    "normal": { "model": "facading:facade" },
+    "down=false,east=false,north=false,south=false,up=false,west=false": { "model": "facading:facade/facade_block" },
+    "down=false,east=false,north=true,south=false,up=false,west=false": { "model": "facading:facade/facade_slab_south" },
+    "down=false,east=false,north=false,south=true,up=false,west=false": { "model": "facading:facade/facade_slab_north" },
+    "down=false,east=true,north=false,south=false,up=false,west=false": { "model": "facading:facade/facade_slab_west" },
+    "down=false,east=false,north=false,south=false,up=false,west=true": { "model": "facading:facade/facade_slab_east" },
+    "down=false,east=false,north=false,south=false,up=true,west=false": { "model": "facading:facade/facade_slab_down" },
+    "down=true,east=false,north=false,south=false,up=false,west=false": { "model": "facading:facade/facade_slab_up" },
+
+
+
     "inventory": {
-      "model": "facading:facade",
+      "model": "facading:facade/facade_block",
       "transform": "forge:default-block"
     }
   }

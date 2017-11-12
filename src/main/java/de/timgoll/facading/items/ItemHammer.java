@@ -59,20 +59,14 @@ public class ItemHammer extends Item implements IHasModel {
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (world.isRemote) {
             if (world.getBlockState(pos).getBlock() == BLOCK_FACADE) {
-                boolean isShiftPressed = (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT));
                 TileBlockFacade tileBlockFacade = (TileBlockFacade) world.getTileEntity(pos);
+                if (tileBlockFacade == null)
+                    return EnumActionResult.SUCCESS;
 
-                player.sendMessage(new TextComponentString( pos.toString() ));
-
-                if (isShiftPressed) {
-                    player.sendMessage(new TextComponentString("prev isSlab: " + tileBlockFacade.isSlab));
-                    tileBlockFacade.isSlab = false;
-                    player.sendMessage(new TextComponentString("Changing Blocktype reversed, now isSlab: " + tileBlockFacade.isSlab));
+                if (player.isSneaking()) {
+                    tileBlockFacade.transform_reversed(facing);
                 } else {
-                    player.sendMessage(new TextComponentString("prev isSlab: " + tileBlockFacade.isSlab));
-                    tileBlockFacade.isSlab = true;
-                    player.sendMessage(new TextComponentString("Changing Blocktype, now isSlab: " + tileBlockFacade.isSlab));
-
+                    tileBlockFacade.transform(facing);
                 }
             }
         }
