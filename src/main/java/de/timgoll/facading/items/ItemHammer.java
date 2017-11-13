@@ -1,6 +1,7 @@
 package de.timgoll.facading.items;
 
 import de.timgoll.facading.Facading;
+import de.timgoll.facading.blocks.BlockFacade;
 import de.timgoll.facading.client.IHasModel;
 import de.timgoll.facading.init.ModRegistry;
 import de.timgoll.facading.titleentities.TileBlockFacade;
@@ -57,17 +58,16 @@ public class ItemHammer extends Item implements IHasModel {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (world.isRemote) {
-            if (world.getBlockState(pos).getBlock() == BLOCK_FACADE) {
+        if (!world.isRemote) {
+            if (world.getBlockState(pos).getBlock() instanceof BlockFacade) {
                 TileBlockFacade tileBlockFacade = (TileBlockFacade) world.getTileEntity(pos);
                 if (tileBlockFacade == null)
-                    return EnumActionResult.SUCCESS;
+                    return EnumActionResult.FAIL;
 
-                if (player.isSneaking()) {
+                if (player.isSneaking())
                     tileBlockFacade.transform_reversed(facing);
-                } else {
+                else
                     tileBlockFacade.transform(facing);
-                }
             }
         }
         return EnumActionResult.SUCCESS;

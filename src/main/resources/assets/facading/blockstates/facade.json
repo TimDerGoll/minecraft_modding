@@ -2,12 +2,23 @@
   "forge_marker": 1,
   "variants": {
     "down=false,east=false,north=false,south=false,up=false,west=false": { "model": "facading:facade/facade_block" },
+
     "down=false,east=false,north=true,south=false,up=false,west=false": { "model": "facading:facade/facade_slab_south" },
     "down=false,east=false,north=false,south=true,up=false,west=false": { "model": "facading:facade/facade_slab_north" },
     "down=false,east=true,north=false,south=false,up=false,west=false": { "model": "facading:facade/facade_slab_west" },
     "down=false,east=false,north=false,south=false,up=false,west=true": { "model": "facading:facade/facade_slab_east" },
     "down=false,east=false,north=false,south=false,up=true,west=false": { "model": "facading:facade/facade_slab_down" },
     "down=true,east=false,north=false,south=false,up=false,west=false": { "model": "facading:facade/facade_slab_up" },
+
+    "down=false,east=false,north=false,south=true,up=false,west=true": { "model": "facading:facade/facade_pillar_north_east" },
+    "down=false,east=true,north=false,south=true,up=false,west=false": { "model": "facading:facade/facade_pillar_north_west" },
+    "down=false,east=false,north=true,south=false,up=false,west=true": { "model": "facading:facade/facade_pillar_south_east" },
+    "down=false,east=true,north=true,south=false,up=false,west=false": { "model": "facading:facade/facade_pillar_south_west" },
+
+    "down=true,east=false,north=false,south=true,up=false,west=true": { "model": "facading:facade/facade_small_up_north_east" },
+    "down=true,east=true,north=false,south=true,up=false,west=false": { "model": "facading:facade/facade_small_up_north_west" },
+    "down=true,east=false,north=true,south=false,up=false,west=true": { "model": "facading:facade/facade_small_up_south_east" },
+    "down=true,east=true,north=true,south=false,up=false,west=false": { "model": "facading:facade/facade_small_up_south_west" },
 
 
 

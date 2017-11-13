@@ -17,6 +17,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -24,6 +25,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
@@ -31,6 +33,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 
@@ -86,12 +91,8 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
     public static void setState(World world, BlockPos pos) {
         TileBlockFacade te = (TileBlockFacade) world.getTileEntity(pos);
 
-        System.out.println("setting state");
-
         if (te == null)
             return;
-
-        System.out.println("having TE");
 
         keepInventory = true; //set keepInventory to true, so that the TE stores the data without dropping inv
         world.setBlockState(pos, world.getBlockState(pos).getBlock().getDefaultState()
@@ -103,6 +104,8 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
                         .withProperty(DOWN, te.down())
                 , 6);
         keepInventory = false;
+
+        world.markBlockRangeForRenderUpdate(pos, pos);
     }
 
     /**
@@ -117,22 +120,13 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
                 .withProperty(UP, false)
                 .withProperty(DOWN, false);
 
-        TileBlockFacade te = (TileBlockFacade) world.getTileEntity(pos);
-
-        if (te == null)
-            System.out.println("no TE in onBlockAdded");
+        world.markBlockRangeForRenderUpdate(pos, pos);
     }
     /**
      * Called by ItemBlocks after a block is set in the world, to allow post-place logic
      */
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileBlockFacade te = (TileBlockFacade) world.getTileEntity(pos);
-
-        if (te == null)
-            System.out.println("no TE in onBlockPlacedBy");
-
-        if (te == null)
-            return;
 
         world.setBlockState(pos, state
                         .withProperty(NORTH, te.north())
@@ -142,6 +136,20 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
                         .withProperty(UP, te.up())
                         .withProperty(DOWN, te.down())
                 , 6);
+
+        world.markBlockRangeForRenderUpdate(pos, pos);
+    }
+
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(
+                state.getProperties().get(EAST).equals(true) ? 0.5D : 1.0D,
+                state.getProperties().get(UP).equals(true) ? 0.5D : 1.0D,
+                state.getProperties().get(SOUTH).equals(true) ? 0.5D : 1.0D,
+                state.getProperties().get(WEST).equals(true) ? 0.5D : 0.0D,
+                state.getProperties().get(DOWN).equals(true) ? 0.5D : 0.0D,
+                state.getProperties().get(NORTH).equals(true) ? 0.5D : 0.0D
+        );
     }
 
     /**
@@ -174,10 +182,9 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileBlockFacade te = (TileBlockFacade) world.getTileEntity(pos);
-
         if (te == null)
             return state
-                    .withProperty(NORTH, false)
+                    .withProperty(NORTH, true)
                     .withProperty(SOUTH, false)
                     .withProperty(WEST, false)
                     .withProperty(EAST, false)
@@ -226,6 +233,38 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
                 .withProperty(EAST, state.getValue(EAST))
                 .withProperty(UP, state.getValue(UP))
                 .withProperty(DOWN, state.getValue(DOWN));
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        if (!keepInventory) {
+            TileBlockFacade te = (TileBlockFacade) world.getTileEntity(pos);
+
+            if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
+                IItemHandler inventory = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+
+                if (inventory != null) {
+                    for (int i = 0; i < inventory.getSlots(); i++) {
+                        if (inventory.getStackInSlot(i) != ItemStack.EMPTY) {
+                            EntityItem item = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, inventory.getStackInSlot(i));
+
+                            float multiplier = 0.1f;
+                            float motionX = world.rand.nextFloat() - 0.5f;
+                            float motionY = world.rand.nextFloat() - 0.5f;
+                            float motionZ = world.rand.nextFloat() - 0.5f;
+
+                            item.motionX = motionX * multiplier;
+                            item.motionY = motionY * multiplier;
+                            item.motionZ = motionZ * multiplier;
+
+                            world.spawnEntity(item);
+                        }
+                    }
+                }
+            }
+            world.removeTileEntity(pos);
+        }
+        super.breakBlock(world, pos, state);
     }
 
 
@@ -277,11 +316,6 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
         return new TileBlockFacade();
     }
 
-    @Override
-    public void breakBlock (World world, BlockPos pos, IBlockState state) {
-        //remove Tileentity, when block is destroyed
-        world.removeTileEntity(pos);
-    }
 
     /**
      * Make a glass effect, sides to adjacent blocks don't get rendered

@@ -178,6 +178,8 @@ public class TileBlockFacade extends TileEntity {
         changedEast  = compound.getBoolean("changedEast");
         changedUp    = compound.getBoolean("changedUp");
         changedDown  = compound.getBoolean("changedDown");
+
+        BlockFacade.setState(this.world, this.pos);
     }
 
     @Override
