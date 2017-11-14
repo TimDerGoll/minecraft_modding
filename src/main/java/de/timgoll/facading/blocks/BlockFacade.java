@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -35,7 +34,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import org.lwjgl.Sys;
 
 import javax.annotation.Nullable;
 
@@ -119,14 +117,15 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
                 .withProperty(EAST, false)
                 .withProperty(UP, false)
                 .withProperty(DOWN, false);
-
-        world.markBlockRangeForRenderUpdate(pos, pos);
     }
     /**
      * Called by ItemBlocks after a block is set in the world, to allow post-place logic
      */
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileBlockFacade te = (TileBlockFacade) world.getTileEntity(pos);
+
+        if (te == null)
+            return;
 
         world.setBlockState(pos, state
                         .withProperty(NORTH, te.north())
@@ -136,8 +135,6 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
                         .withProperty(UP, te.up())
                         .withProperty(DOWN, te.down())
                 , 6);
-
-        world.markBlockRangeForRenderUpdate(pos, pos);
     }
 
     @SuppressWarnings("deprecation")
