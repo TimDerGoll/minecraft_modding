@@ -89,6 +89,8 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
     public static void setState(World world, BlockPos pos) {
         TileBlockFacade te = (TileBlockFacade) world.getTileEntity(pos);
 
+        System.out.println("Setting state");
+
         if (te == null)
             return;
 
@@ -102,6 +104,8 @@ public class BlockFacade extends Block implements IHasModel, ITileEntityProvider
                         .withProperty(DOWN, te.down())
                 , 6);
         keepInventory = false;
+
+        System.out.println("refresh area: " + pos);
 
         world.markBlockRangeForRenderUpdate(pos, pos);
     }

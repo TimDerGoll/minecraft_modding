@@ -14,11 +14,23 @@
     "down=false,east=true,north=false,south=true,up=false,west=false": { "model": "facading:facade/facade_pillar_north_west" },
     "down=false,east=false,north=true,south=false,up=false,west=true": { "model": "facading:facade/facade_pillar_south_east" },
     "down=false,east=true,north=true,south=false,up=false,west=false": { "model": "facading:facade/facade_pillar_south_west" },
+    "down=false,east=false,north=false,south=true,up=true,west=false": { "model": "facading:facade/facade_pillar_down_north" },
+    "down=false,east=false,north=true,south=false,up=true,west=false": { "model": "facading:facade/facade_pillar_down_south" },
+    "down=false,east=false,north=false,south=false,up=true,west=true": { "model": "facading:facade/facade_pillar_down_east" },
+    "down=false,east=true,north=false,south=false,up=true,west=false": { "model": "facading:facade/facade_pillar_down_west" },
+    "down=true,east=false,north=true,south=false,up=false,west=false": { "model": "facading:facade/facade_pillar_up_south" },
+    "down=true,east=false,north=false,south=true,up=false,west=false": { "model": "facading:facade/facade_pillar_up_north" },
+    "down=true,east=false,north=false,south=false,up=false,west=true": { "model": "facading:facade/facade_pillar_up_east" },
+    "down=true,east=true,north=false,south=false,up=false,west=false": { "model": "facading:facade/facade_pillar_up_west" },
 
     "down=true,east=false,north=false,south=true,up=false,west=true": { "model": "facading:facade/facade_small_up_north_east" },
     "down=true,east=true,north=false,south=true,up=false,west=false": { "model": "facading:facade/facade_small_up_north_west" },
     "down=true,east=false,north=true,south=false,up=false,west=true": { "model": "facading:facade/facade_small_up_south_east" },
     "down=true,east=true,north=true,south=false,up=false,west=false": { "model": "facading:facade/facade_small_up_south_west" },
+    "down=false,east=false,north=true,south=false,up=true,west=true": { "model": "facading:facade/facade_small_down_south_east" },
+    "down=false,east=true,north=true,south=false,up=true,west=false": { "model": "facading:facade/facade_small_down_south_west" },
+    "down=false,east=false,north=false,south=true,up=true,west=true": { "model": "facading:facade/facade_small_down_north_east" },
+    "down=false,east=true,north=false,south=true,up=true,west=false": { "model": "facading:facade/facade_small_down_north_west" },
 
 
 
